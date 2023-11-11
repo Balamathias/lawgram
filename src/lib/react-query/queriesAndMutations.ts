@@ -5,7 +5,7 @@ import {
     useInfiniteQuery
 } from '@tanstack/react-query'
 
-import { SignInAccount, createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getPostById, getRecentPosts, likePost, savePost, searchPosts, signOutAccount, updatePost } from '../appwrite/api'
+import { SignInAccount, createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getInfiniteRecentPosts, getInfiniteUsers, getPostById, getRecentPosts, getSavedPosts, likePost, savePost, searchPosts, signOutAccount, updatePost } from '../appwrite/api'
 import { INewPost, INewUser, IUpdatePost } from '@/types'
 import { QUERY_KEYS } from './queryKeys'
 
@@ -49,7 +49,7 @@ export const useGetRecentPosts = () => {
 
 export const useLikePost = () => {
     const queryClient = useQueryClient()
-
+    
     return useMutation({
         mutationFn: ({postId, likesArray}: {postId: string, likesArray: string[]}) => likePost(postId, likesArray),
         onSuccess: (data) => {
@@ -58,6 +58,14 @@ export const useLikePost = () => {
             queryClient.invalidateQueries({queryKey: [QUERY_KEYS.GET_USER_BY_ID]})
             queryClient.invalidateQueries({queryKey: [QUERY_KEYS.GET_CURRENT_USER]})
         }
+    })
+}
+
+export const useGetSavedPosts = (userId: string) => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.GET_SAVED_POSTS],
+        queryFn: () => getSavedPosts(userId),
+        enabled: !!userId
     })
 }
 
@@ -70,6 +78,7 @@ export const useSavePost = () => {
             queryClient.invalidateQueries({queryKey: [QUERY_KEYS.GET_RECENT_POSTS]})
             queryClient.invalidateQueries({queryKey: [QUERY_KEYS.GET_USER_BY_ID]})
             queryClient.invalidateQueries({queryKey: [QUERY_KEYS.GET_CURRENT_USER]})
+            queryClient.invalidateQueries({queryKey: [QUERY_KEYS.GET_SAVED_POSTS]})
         }
     })
 }
@@ -83,6 +92,7 @@ export const useDeleteSavedPost = () => {
             queryClient.invalidateQueries({queryKey: [QUERY_KEYS.GET_RECENT_POSTS]})
             queryClient.invalidateQueries({queryKey: [QUERY_KEYS.GET_USER_BY_ID]})
             queryClient.invalidateQueries({queryKey: [QUERY_KEYS.GET_CURRENT_USER]})
+            queryClient.invalidateQueries({queryKey: [QUERY_KEYS.GET_SAVED_POSTS]})
         }
     })
 }
@@ -142,5 +152,29 @@ export const useSearchPosts = (searchTerm: string) => {
         queryFn: () => searchPosts(searchTerm),
         enabled: !!searchTerm
     })
-} 
+}
+
+export const useGetInfinitePosts = () => {
+    return useInfiniteQuery({
+        queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+        queryFn: getInfiniteRecentPosts,
+        getNextPageParam: (lastPage) => {
+            if (lastPage && lastPage.documents.length === 0) return null
+            const lastId = lastPage?.documents[lastPage.documents.length -1].$id
+            return lastId
+        }
+    })
+}
+
+export const useGetInfiniteUsers = () => {
+    return useInfiniteQuery({
+        queryKey: [QUERY_KEYS.GET_USERS],
+        queryFn: getInfiniteUsers,
+        getNextPageParam: (lastPage) => {
+            if (lastPage && lastPage.documents.length === 0) return null
+            const lastId = lastPage?.documents[lastPage.documents.length -1].$id
+            return lastId
+        }
+    })
+}
 

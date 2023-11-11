@@ -3,7 +3,7 @@ import { Models } from "appwrite"
 import { Link } from "react-router-dom"
 import PostStats from "./PostStats"
 
-function GridPostList({posts, showUser=true, showStats=true}: {posts: Models.Document[], showUser?:boolean, showStats?:boolean}) {
+function GridPostList({posts, showUser=true, showStats=true}: {posts?: Models.Document[], showUser?:boolean, showStats?:boolean}) {
     const { user } = useUserAuth()
   return (
     <ul className="grid-container">

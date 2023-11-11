@@ -186,6 +186,26 @@ export async function getRecentPosts() {
     }
 }
 
+export async function getInfiniteRecentPosts({pageParam}: {pageParam: number}) {
+    const queries: any[] = [Query.orderDesc('$createdAt'), Query.limit(5)]
+
+    if (pageParam) {
+        queries.push(Query.cursorAfter(pageParam.toString()))
+    }
+
+    try {
+        const posts = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.postsCollectionId,
+            queries
+        )
+        if (!posts) throw Error
+        return posts
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export async function likePost(postId: string, likesArray: string[]) {
     try {
         const updatedPost = await databases.updateDocument(
@@ -232,6 +252,21 @@ export async function deleteSavedPost(recordId: string) {
         if (!statusCode) throw Error
 
         return {status: "ok", code: 200}
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function getSavedPosts(userId: string) {
+    try {
+        const posts = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.savesCollectionId,
+            [Query.equal('user', userId)]
+        )
+        if (!posts) throw Error
+
+        return posts
     } catch (error) {
         console.log(error)
     }
@@ -350,3 +385,25 @@ export async function searchPosts(searchTerm: string) {
         console.log(error)
     }
 }
+
+export async function getInfiniteUsers({ pageParam }: {pageParam: number}) {
+    const queries = [Query.limit(10)];
+  
+    if (pageParam) {
+      queries.push(Query.cursorAfter(pageParam.toString()));
+    }
+  
+    try {
+      const users = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.userCollectionId,
+        queries
+      );
+  
+      if (!users) throw Error;
+  
+      return users;
+    } catch (error) {
+      console.log(error);
+    }
+  }
