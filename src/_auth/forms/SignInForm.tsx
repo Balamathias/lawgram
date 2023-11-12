@@ -24,7 +24,7 @@ import { useUserAuth } from "@/context/AuthContext"
 function SignInForm() {
   const { toast } = useToast()
   const { mutateAsync: getUserSession, isPending } = useSignIn()
-  const { checkUser, isLoading } = useUserAuth()
+  const { checkUser } = useUserAuth()
   const navigate = useNavigate()
 
   const form = useForm<z.infer<typeof SignInValidation>>({
@@ -92,7 +92,7 @@ function SignInForm() {
           />
         <Button type="submit" className="bg-orange-600 hover:bg-orange-700">{
           isPending ? <div className="flex gap-2 items-center">
-            <Loader loading={isPending || isLoading} />
+            <Loader />
             <span className="mx-2 text-sm">Loading...</span>
           </div> : 'Sign In'
         }</Button>
