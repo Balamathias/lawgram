@@ -1,13 +1,12 @@
 import { Button } from "@/components/ui/button"
 import { Link, useNavigate } from "react-router-dom"
-import { useSignOut } from "../react-query/queriesAndMutations"
+import { useGetCurrentUser, useSignOut } from "../react-query/queriesAndMutations"
 import { useEffect } from "react"
-import { useUserAuth } from "@/context/AuthContext"
 
 function Topbar() {
     const { mutate: signOut, isSuccess } = useSignOut()
     const navigate= useNavigate()
-    const { user } = useUserAuth()
+    const { data: user } = useGetCurrentUser()
 
     useEffect(() => {
         if (isSuccess) {
@@ -26,9 +25,9 @@ function Topbar() {
                 <Button onClick={() => signOut()} variant="ghost" className="shad-button_ghost">
                     <img src="/assets/icons/logout.svg"/> 
                 </Button>
-                <Link to={`/profile/${user.id}`} className="flex-center">
+                <Link to={`/profile/${user?.$id}`} className="flex-center">
                     <img
-                        src={user.profileImage || '/assets/icons/profile-placeholder.svg'}
+                        src={user?.profileImage || '/assets/icons/profile-placeholder.svg'}
                         width={40}
                         height={40}
                         className="object-cover rounded-full gap-3"
