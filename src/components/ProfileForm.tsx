@@ -36,7 +36,7 @@ function ProfileForm({user}: {user?: Models.Document}) {
       username: user ? user.username : "",
       email: user ? user.email : "",
       bio: user ? user?.bio : "",
-      file: user ? user.profileImage : []
+      file: user ? [user?.profileImage] : []
     },
   })
     
@@ -45,7 +45,7 @@ function ProfileForm({user}: {user?: Models.Document}) {
         if (user) {
           const updatedUser = await updateUser({
             ...values,
-            profileImage: user?.profileImage,
+            profileImage: user.profileImage,
             userId: user?.$id,
             imageId: user?.imageId,
         })
@@ -127,7 +127,7 @@ function ProfileForm({user}: {user?: Models.Document}) {
               )}
             />
             <div className="flex items-center justify-end gap-4">
-                <Button type="button" className="shad-button_dark_4">Cancel</Button>
+                <Button type="button" className="shad-button_dark_4" onClick={() => form.reset()}>Cancel</Button>
                 <Button type="submit" className="bg-primary-600 shad-button whitespace-nowrap">
                     {isPending  ? (
                         <span className="flex gap-3 items-center">

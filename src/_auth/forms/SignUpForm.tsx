@@ -56,8 +56,8 @@ function SignUpForm() {
   return (
     <Form {...form}>
 
-      <div className="sm:w-420 gap-y-1 p-3 space-y-5 md:pt-16">
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 w-full flex flex-col gap-5">
+      <div className="sm:w-420 gap-y-1 p-3 space-y-5 md:pt-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 w-full flex flex-col gap-1">
           <div className="flex items-center gap-x-2">
             <img
               src="/assets/images/slide_2.svg"
@@ -68,7 +68,7 @@ function SignUpForm() {
             />
             <span className="font-bold text-xl text-orange-500">Lawgram.</span>
           </div>
-          <h2 className="font-bold text-lg py-2">Create an account.</h2>
+          <h2 className="font-bold text-lg py-1">Create an account.</h2>
           <p className="text-sm font-thin">Hi there! Create an account on Lawgram to stay up to date with our trending feeds.</p>
           <FormField
             control={form.control}

@@ -31,7 +31,7 @@ function LeftSidebar() {
                 />
                 <span className="font-bold text-xl text-primary-600">Lawgram.</span>
             </Link>
-            <Link to={`/profile/${user.id}`} className="flex gap-3 items-center">
+            <Link to={`/profile/${user?.id}`} className="flex gap-3 items-center">
                 <img
                     src={user.profileImage || '/assets/icons/profile-placeholder.svg'}
                     width={40}

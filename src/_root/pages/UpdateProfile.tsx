@@ -1,8 +1,12 @@
 import ProfileForm from "@/components/ProfileForm"
 import { useGetCurrentUser } from "@/lib/react-query/queriesAndMutations"
+import Loader from "@/lib/shared/Loader"
 
 function UpdateProfile() {
-  const {data: currentUser} = useGetCurrentUser()
+  const {data: currentUser, isPending} = useGetCurrentUser()
+
+  if (isPending) return <Loader/>
+  
   return (
     <div className="flex flex-1">
       <div className="common-container">

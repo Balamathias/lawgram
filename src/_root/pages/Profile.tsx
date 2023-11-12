@@ -37,7 +37,7 @@ function Profile() {
                     height={14}
                   />
                   <p className="small-medium text-light-3">
-                    Edit Post
+                    Edit Profile
                   </p>
                 </Link>}
               </div>

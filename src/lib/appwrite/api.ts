@@ -457,31 +457,23 @@ export async function getUserById(userId: string) {
   }
 
   export async function updateUser(user: IUpdateUser) {
+    const hasFileToUpload = user.file.length > 1
     try {
-        const hasFileToUpload = user.file.length > 0;
         let image = {
             profileImage: user.profileImage,
-            imageId: user.imageId,
-        };
+            imageId: user.imageId
+        }
 
         if (hasFileToUpload) {
-            const uploadedFile = await uploadFile(user.file[0]);
-            if (!uploadedFile) {
-                throw new Error("File upload failed");
-            }
-            
-            const fileUrl = await getFilePreview(uploadedFile.$id);
-
+            const uploadedFile = uploadFile(user.file[0])
+            if (!uploadedFile) throw Error
+            const fileUrl:URL = await getFilePreview((await uploadedFile).$id)
+    
             if (!fileUrl) {
-                deleteFile(uploadedFile.$id);
-                throw new Error("File URL retrieval failed");
+                deleteFile((await uploadedFile).$id)
+                throw Error
             }
-            
-            image = {
-                ...image,
-                profileImage: fileUrl,
-                imageId: uploadedFile.$id,
-            };
+            image = {...image, profileImage: fileUrl, imageId: (await uploadedFile).$id }
         }
 
         const updatedUser = await databases.updateDocument(
@@ -490,20 +482,20 @@ export async function getUserById(userId: string) {
             user.userId,
             {
                 name: user.name,
-                profileImage: image.profileImage,
                 bio: user.bio,
+                profileImage: image.profileImage
+                
             }
-        );
+        )
 
         if (!updatedUser) {
-            deleteFile(user.userId);
-            throw new Error("User update failed");
+            deleteFile(image.imageId)
+            throw Error
         }
 
-        return updatedUser;
+        return updatedUser
     } catch (error) {
-        console.error(error);
-        throw error;
+        console.log(error)
+        return error
     }
 }
-
