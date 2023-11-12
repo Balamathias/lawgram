@@ -25,7 +25,7 @@ function SavedPosts() {
           {  filteredSavedPosts?.length === 0 || !savedPosts ? <p className="text-light-200 text-sm small-regular w-full-py-10">You do not have any saved posts yet.</p> : 
           <GridPostList 
             posts={filteredSavedPosts}
-            showStats={false}
+            showStats={true}
             />}
         </div>
       </div>

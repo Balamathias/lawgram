@@ -37,9 +37,9 @@ function PostCard({post}: {post: Models.Document}) {
         </div>
         <Link to={`/posts/${post.$id}`}>
             <div className="small-medium lg:base-medium py-5">
-                <p>{post.caption}</p>
+                <p className="base-medium tracking-normal text-light-2 leading-9">{post.caption}</p>
                 <ul className="flex gap-1 mt-2">
-                    {post.tags.map((tag: string) => <li className="text-primary-600" key={tag}>#{tag}</li>)}
+                    {post.tags.map((tag: string) => <Link to={`/posts/tags?tag=${tag}`} className="text-primary-600" key={tag}>#{tag}</Link>)}
                 </ul>
             </div>
         </Link>

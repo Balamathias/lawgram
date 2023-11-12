@@ -5,9 +5,10 @@ import {
     useInfiniteQuery
 } from '@tanstack/react-query'
 
-import { SignInAccount, createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getInfiniteRecentPosts, getInfiniteUsers, getPostById, getRecentPosts, getSavedPosts, likePost, savePost, searchPosts, signOutAccount, updatePost } from '../appwrite/api'
-import { INewPost, INewUser, IUpdatePost } from '@/types'
+import { SignInAccount, createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getInfiniteRecentPosts, getInfiniteUserPosts, getInfiniteUsers, getPostById, getRecentPosts, getSavedPosts, getUserById, getUserPosts, likePost, savePost, searchPosts, signOutAccount, updatePost, updateUser } from '../appwrite/api'
+import { INewPost, INewUser, IUpdatePost, IUpdateUser } from '@/types'
 import { QUERY_KEYS } from './queryKeys'
+import { Models } from 'appwrite'
 
 export const useCreateNewUser = () => {
     return useMutation({
@@ -154,6 +155,14 @@ export const useSearchPosts = (searchTerm: string) => {
     })
 }
 
+export const useGetPostsByTag = (tag: string) => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.GET_POSTS_BY_TAG, tag],
+        queryFn: () => searchPosts(tag),
+        enabled: !!tag
+    })
+}
+
 export const useGetInfinitePosts = () => {
     return useInfiniteQuery({
         queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
@@ -174,6 +183,34 @@ export const useGetInfiniteUsers = () => {
             if (lastPage && lastPage.documents.length === 0) return null
             const lastId = lastPage?.documents[lastPage.documents.length -1].$id
             return lastId
+        }
+    })
+}
+
+export const useGetUser = (userId: string) => {
+    return useQuery({
+        queryFn:() => getUserById(userId),
+        queryKey: [QUERY_KEYS.GET_USER_BY_ID, userId],
+        enabled: !!userId
+    })
+}
+
+
+export const useGetUserPosts = (userId: string) => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.GET_USER_POSTS, userId],
+        queryFn:() => getUserPosts(userId),
+        enabled: !!userId
+    })
+}
+
+export const useUpdateUser = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: (user: IUpdateUser) => updateUser(user),
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({queryKey: [QUERY_KEYS.GET_USER_BY_ID, data?.$id]})
         }
     })
 }

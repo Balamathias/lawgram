@@ -60,9 +60,9 @@ function AuthProvider({children}: { children: React.ReactNode}) {
         if (localStorage.getItem('cookieFallback') === '[]') {
             navigate('/sign-in')
         } 
-        // else if (localStorage.getItem('cookieFallback') === null) navigate('/sign-up')
+        else if (localStorage.getItem('cookieFallback') === null) navigate('/sign-up')
         else checkUser()
-    }, [navigate])
+    }, [])
     
     const value = {
         user: user,

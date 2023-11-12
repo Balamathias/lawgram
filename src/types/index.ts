@@ -9,7 +9,7 @@ export type INavLink = {
     name: string;
     bio: string;
     imageId: string;
-    imageUrl: URL | string;
+    profileImage: URL | string;
     file: File[];
   };
   

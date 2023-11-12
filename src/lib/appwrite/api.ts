@@ -1,4 +1,4 @@
-import { INewPost, INewUser, IUpdatePost } from "@/types"
+import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types"
 import { account, appwriteConfig, avatars, databases, storage } from "./config"
 import { ID, Query } from "appwrite"
 
@@ -102,7 +102,7 @@ export async function createPost(post: INewPost) {
             throw Error
         }
 
-        const tags = post.tags?.replace(/ /g, '').split(',') || []
+        const tags = post.tags?.replace(/ /g, '').toLowerCase().split(',') || []
 
         const newPost = await databases.createDocument(
             appwriteConfig.databaseId,
@@ -309,7 +309,7 @@ export async function updatePost(post: IUpdatePost) {
 
 
 
-        const tags = post.tags?.replace(/ /g, '').split(',') || []
+        const tags = post.tags?.replace(/ /g, '').toLowerCase().split(',') || []
 
         const updatedPost = await databases.updateDocument(
             appwriteConfig.databaseId,
@@ -353,11 +353,27 @@ export async function deletePost(postId: string, imageId: string) {
 }
 
 export async function getInfinitePosts({pageParam}: {pageParam: number}) {
-    const queries: any[] = [Query.orderDesc('$updatedAt'), Query.limit(10)]
+    const queries: any[] = [Query.orderDesc('$updatedAt'), Query.limit(6)]
 
     if (pageParam) {
         queries.push(Query.cursorAfter(pageParam.toString()))
     }
+
+    try {
+        const posts = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.postsCollectionId,
+            queries
+        )
+        if (!posts) throw Error
+        return posts
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function getUserPosts(userId: string) {
+    const queries: any[] = [Query.equal('creator', userId), Query.orderDesc('$createdAt'), Query.limit(10)]
 
     try {
         const posts = await databases.listDocuments(
@@ -378,6 +394,20 @@ export async function searchPosts(searchTerm: string) {
             appwriteConfig.databaseId,
             appwriteConfig.postsCollectionId,
             [Query.search('caption', searchTerm)]
+        )
+        if (!posts) throw Error
+        return posts
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function getPostsByTag(tag: string) {
+    try {
+        const posts = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.postsCollectionId,
+            [Query.search('tags', tag), Query.orderDesc('$createdAt'), Query.orderDesc('$updatedAt')]
         )
         if (!posts) throw Error
         return posts
@@ -407,3 +437,71 @@ export async function getInfiniteUsers({ pageParam }: {pageParam: number}) {
       console.log(error);
     }
   }
+
+export async function getUserById(userId: string) {  
+    try {
+      const user = await databases.getDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.userCollectionId,
+        userId
+      );
+  
+      if (!user) throw Error;
+  
+      return user;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  export async function updateUser(user: IUpdateUser) {
+    try {
+        const hasFileToUpload = user.file.length > 0;
+        let image = {
+            profileImage: user.profileImage,
+            imageId: user.imageId,
+        };
+
+        if (hasFileToUpload) {
+            const uploadedFile = await uploadFile(user.file[0]);
+            if (!uploadedFile) {
+                throw new Error("File upload failed");
+            }
+            
+            const fileUrl = await getFilePreview(uploadedFile.$id);
+
+            if (!fileUrl) {
+                deleteFile(uploadedFile.$id);
+                throw new Error("File URL retrieval failed");
+            }
+            
+            image = {
+                ...image,
+                profileImage: fileUrl,
+                imageId: uploadedFile.$id,
+            };
+        }
+
+        const updatedUser = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            user.userId,
+            {
+                name: user.name,
+                profileImage: image.profileImage,
+                bio: user.bio,
+            }
+        );
+
+        if (!updatedUser) {
+            deleteFile(user.userId);
+            throw new Error("User update failed");
+        }
+
+        return updatedUser;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+

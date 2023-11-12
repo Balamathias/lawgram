@@ -1,14 +1,15 @@
+import { useUserAuth } from '@/context/AuthContext'
 import { Outlet, Navigate } from 'react-router-dom'
 
 
 function AuthLayout() {
-  const isAuthenticated: boolean = false
+  const {isAuthenticated} = useUserAuth()
 
   return (
     <>
       {isAuthenticated ? <Navigate to="/" /> : <>
       
-        <section className="flex flex-1 justify-center flex-col h-screen items-center py-auto">
+        <section className="flex flex-1 justify-center flex-col h-screen items-center py-auto common-container">
           <Outlet />
         </section>
 

@@ -19,5 +19,9 @@ export enum QUERY_KEYS {
     SEARCH_POSTS = "getSearchPosts",
 
     // saved
-    GET_SAVED_POSTS = 'getSavedPosts'
+    GET_SAVED_POSTS = 'getSavedPosts',
+
+    GET_POSTS_BY_TAG = 'getPostsByTag',
+
+    GET_USER_INFINITE_POSTS = 'getUserInfinitePosts'
 }

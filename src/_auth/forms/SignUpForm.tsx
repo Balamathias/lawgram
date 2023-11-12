@@ -56,7 +56,7 @@ function SignUpForm() {
   return (
     <Form {...form}>
 
-      <div className="sm:w-420 gap-y-1 p-3 space-y-5">
+      <div className="sm:w-420 gap-y-1 p-3 space-y-5 md:pt-16">
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 w-full flex flex-col gap-5">
           <div className="flex items-center gap-x-2">
             <img

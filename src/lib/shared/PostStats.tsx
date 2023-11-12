@@ -65,7 +65,7 @@ function PostStats({post, userId}: {post?: Models.Document, userId: string}) {
         </div>
         <div className="flex flex-center gap-1">
             {isDeleting || isSaving ? <Loader /> : <img
-                src={isSaved ? `/assets/icons/save.svg` : `/assets/icons/saved.svg`}
+                src={isSaved ? `/assets/icons/saved.svg` : `/assets/icons/save.svg`}
                 width={20}
                 height={20}
                 onClick={handleSavePost}
