@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Models } from "appwrite"
 import { Link } from "react-router-dom"
 
-function UserCardGrid({users}: {users: Models.Document[]}) {
+function UserCardGrid({users}: {users?: Models.Document[]}) {
   console.log(users)
   return (
     <div className="flex gap-5 w-full max-w-5xl flex-wrap md:justify-start justify-center">

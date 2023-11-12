@@ -416,7 +416,7 @@ export async function getPostsByTag(tag: string) {
     }
 }
 
-export async function getInfiniteUsers({ pageParam }: {pageParam: number}) {
+export async function getInfiniteUsers({ pageParam }: {pageParam?: number}) {
     const queries = [Query.limit(10)];
   
     if (pageParam) {

@@ -5,10 +5,9 @@ import {
     useInfiniteQuery
 } from '@tanstack/react-query'
 
-import { SignInAccount, createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getInfiniteRecentPosts, getInfiniteUserPosts, getInfiniteUsers, getPostById, getRecentPosts, getSavedPosts, getUserById, getUserPosts, likePost, savePost, searchPosts, signOutAccount, updatePost, updateUser } from '../appwrite/api'
+import { SignInAccount, createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getInfiniteRecentPosts, getInfiniteUsers, getPostById, getRecentPosts, getSavedPosts, getUserById, getUserPosts, likePost, savePost, searchPosts, signOutAccount, updatePost, updateUser } from '../appwrite/api'
 import { INewPost, INewUser, IUpdatePost, IUpdateUser } from '@/types'
 import { QUERY_KEYS } from './queryKeys'
-import { Models } from 'appwrite'
 
 export const useCreateNewUser = () => {
     return useMutation({
@@ -118,7 +117,7 @@ export const useUpdatePost = () => {
 
     return useMutation({
         mutationFn: (post: IUpdatePost) => updatePost(post),
-        onSuccess: (data) => {
+        onSuccess: (data: any) => {
             queryClient.invalidateQueries({queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id]})
         }
     })
@@ -141,11 +140,11 @@ export const useGetPosts = () => {
         queryFn: getInfinitePosts,
         getNextPageParam: (lastPage) => {
             if (lastPage && lastPage.documents.length === 0) return null
-            const lastId = lastPage?.documents[lastPage.documents.length -1].$id
-            return lastId
+            const lastId = lastPage?.documents[lastPage.documents.length - 1].$id
+            return lastId 
         }
-    })
-}
+    });
+};
 
 export const useSearchPosts = (searchTerm: string) => {
     return useQuery({

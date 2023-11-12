@@ -1,11 +1,8 @@
-import { useEffect } from 'react'
-
-import { useGetCurrentUser, useGetUser, useGetUserInfinitePosts, useGetUserPosts } from "@/lib/react-query/queriesAndMutations"
+import { useGetCurrentUser, useGetUser, useGetUserPosts } from "@/lib/react-query/queriesAndMutations"
 import Loader from "@/lib/shared/Loader"
 import { Link, useParams } from "react-router-dom"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import GridPostList from "@/lib/shared/GridPostList"
-import { useInView } from "react-intersection-observer"
 
 function Profile() {
   const {id} = useParams()

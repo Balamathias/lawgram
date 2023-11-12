@@ -123,7 +123,7 @@ function SignUpForm() {
         />
         <Button type="submit" className="bg-orange-600 hover:bg-orange-700">{
           isPending ? <div className="flex gap-2 items-center">
-            <Loader loading={isPending || isLoading} />
+            <Loader />
             <span className="mx-2 text-sm">Loading...</span>
           </div> : 'Sign Up'
         }</Button>
