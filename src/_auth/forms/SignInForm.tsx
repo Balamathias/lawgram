@@ -62,7 +62,7 @@ function SignInForm() {
             />
             <span className="font-bold text-xl text-orange-500">Lawgram.</span>
           </div>
-          <h2 className="font-bold text-lg py-2">Log in to your an account.</h2>
+          <h2 className="font-bold text-lg py-2">Login to your account.</h2>
           <p className="text-sm font-thin">Welcome back, we are happy to have you back, now you can log in to your account to stay up to date.</p>
           <FormField
             control={form.control}

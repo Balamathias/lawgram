@@ -69,6 +69,7 @@ function SignUpForm() {
             <span className="font-bold text-xl text-orange-500">Lawgram.</span>
           </div>
           <h2 className="font-bold text-lg py-2">Create an account.</h2>
+          <p className="text-sm font-thin">Hi there! Create an account on Lawgram to stay up to date with our trending feeds.</p>
           <FormField
             control={form.control}
             name="name"
