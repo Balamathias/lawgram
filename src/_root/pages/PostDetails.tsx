@@ -68,7 +68,7 @@ function PostDetails() {
                   </div>
                 </Link>
                 <div className="flex-center gap-4">
-                  <Link to={`/update-post/${post?.$id}`} className={`${user.id !== post?.creator.$id && "hidden"}`}>
+                  <Link to={`/update-post/${post?.$id}`} className={`${user.id !== post?.creator.$id ? "hidden" : ""}`}>
                       <img
                           src="/assets/icons/edit.svg"
                           alt="edit"
@@ -76,25 +76,27 @@ function PostDetails() {
                           height={24}
                       />
                   </Link>
-                  <Popover>
-                    <PopoverTrigger className="ghost_details-delete_btn">
-                      <img
-                        src="/assets/icons/delete.svg"
-                        width={24}
-                        height={24}
-                        alt="delete"
-                      />
-                    </PopoverTrigger>
-                    <PopoverContent className="py-6 flex flex-col gap-3 px-6 rounded-lg shadow z-20 bg-dark-2 border-rose-900">
-                      <p className="text-rose-400 base-medium">Are you sure you want to delete this post? This action cannot be undone!</p>
-                      <Button variant={'ghost'} className="ghost_details-delete_btn border border-rose-800 justify-end flex items-center gap-3 w-fit hover:bg-rose-800 hover:text-lime-50"
-                        onClick={handleDeletePost}
-                      >
-                        {isDeleting ? <Loader /> : <img src="/assets/icons/delete.svg" alt="delete" width={16} height={16} />}
-                        <span>Delet{isDeleting ? 'ing...': 'e'}</span>
-                      </Button>
-                    </PopoverContent>
-                  </Popover>
+                  <div className={`${user.id !== post?.creator.$id ? "hidden" : ""}`}>
+                    <Popover>
+                      <PopoverTrigger className="ghost_details-delete_btn">
+                        <img
+                          src="/assets/icons/delete.svg"
+                          width={24}
+                          height={24}
+                          alt="delete"
+                        />
+                      </PopoverTrigger>
+                      <PopoverContent className="py-6 flex flex-col gap-3 px-6 rounded-lg shadow z-20 bg-dark-2 border-rose-900">
+                        <p className="text-rose-400 base-medium">Are you sure you want to delete this post? This action cannot be undone!</p>
+                        <Button variant={'ghost'} className={`ghost_details-delete_btn border border-rose-800 justify-end flex items-center gap-3 w-fit hover:bg-rose-800 hover:text-lime-50`}
+                          onClick={handleDeletePost}
+                        >
+                          {isDeleting ? <Loader /> : <img src="/assets/icons/delete.svg" alt="delete" width={16} height={16} />}
+                          <span>Delet{isDeleting ? 'ing...': 'e'}</span>
+                        </Button>
+                      </PopoverContent>
+                    </Popover>
+                  </div>
                 </div>
               </div>
               <hr className="border border-dark-4/80 w-full" />
