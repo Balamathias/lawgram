@@ -19,7 +19,12 @@ function PostCard({post}: {post: Models.Document}) {
                     />
                 </Link>
                 <div className="flex flex-col gap-3">
-                    <p className="base-medium text-light-2 lg:body-bold">{post?.creator?.name}</p>
+                    <p className="base-medium flex items-center gap-2 text-light-2 lg:body-bold"><span>{post?.creator?.name}</span> . {post?.creator?.email === 'balamathias40@gmail.com' && <img
+                        src="/assets/icons/twitter-verified-badge.svg"
+                        alt="badge"
+                        width={20}
+                        height={20}
+                    />}</p>
                     <div className="flex flex-center gap-3">
                         <p className="subtle-semibold lg:small-regular">{multiFormatDateString(post?.$createdAt)}</p>
                         -

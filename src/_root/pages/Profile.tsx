@@ -78,6 +78,10 @@ function Profile() {
             <h3 className="h3-bold md:h2-bold tracking-widest text-light-2"><span className="text-primary-600">{posts?.documents?.length}</span> post{posts?.documents?.length === 1 ? '': 's'}.</h3>
             {isGettingUserPosts ? <Loader /> : <GridPostList posts={posts?.documents} showUser={false}/>}
           </TabsContent>
+          <TabsContent value="pictures" className='flex w-full max-w-5xl flex-col gap-4 py-6'>
+            <h3 className="h3-bold md:h2-bold tracking-widest text-light-2"><span className="text-primary-600">{posts?.documents?.length}</span> post{posts?.documents?.length === 1 ? '': 's'}.</h3>
+            {isGettingUserPosts ? <Loader /> : <h2 className="base-medium">Reels Coming soon</h2>}
+          </TabsContent>
         </Tabs>
       </div>
     </div>

@@ -407,7 +407,7 @@ export async function getPostsByTag(tag: string) {
         const posts = await databases.listDocuments(
             appwriteConfig.databaseId,
             appwriteConfig.postsCollectionId,
-            [Query.search('tags', tag), Query.orderDesc('$createdAt'), Query.orderDesc('$updatedAt')]
+            [Query.select([tag]), Query.orderDesc('$createdAt'), Query.orderDesc('$updatedAt')]
         )
         if (!posts) throw Error
         return posts
