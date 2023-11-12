@@ -1,6 +1,7 @@
 import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types"
 import { account, appwriteConfig, avatars, databases, storage } from "./config"
 import { ID, Query } from "appwrite"
+import { URL } from "url"
 
 export async function createUserAccount(user: INewUser) {
     try {
@@ -141,7 +142,7 @@ export async function uploadFile(file: File) {
     return promise
 }
 
-export async function getFilePreview(filedId: string) {
+export async function getFilePreview(filedId: string): Promise<URL> {
     try {
         const previewUrl = await storage.getFilePreview(
             appwriteConfig.storageId,
@@ -155,7 +156,7 @@ export async function getFilePreview(filedId: string) {
         if (!previewUrl) throw Error
 
         return previewUrl
-    } catch (error) {
+    } catch (error: any) {
         console.log(error)
         return error
     }
@@ -298,7 +299,7 @@ export async function updatePost(post: IUpdatePost) {
         if (hasFileToUpload) {
             const uploadedFile = uploadFile(post.file[0])
             if (!uploadedFile) throw Error
-            const fileUrl = await getFilePreview((await uploadedFile).$id)
+            const fileUrl:URL = await getFilePreview((await uploadedFile).$id)
     
             if (!fileUrl) {
                 deleteFile((await uploadedFile).$id)
@@ -367,8 +368,9 @@ export async function getInfinitePosts({pageParam}: {pageParam: number}) {
         )
         if (!posts) throw Error
         return posts
-    } catch (error) {
+    } catch (error: any) {
         console.log(error)
+        return error
     }
 }
 

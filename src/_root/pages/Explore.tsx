@@ -61,7 +61,7 @@ function Explore() {
         {shouldShowSearchResults ? (
           <SearchResults 
             isSearching={isSearching}
-            posts={searchPosts}
+            posts={searchPosts?.documents}
             debounceValue={debounceValue}
           />
           ) : showSearchPosts ? <p className="small-regular text-light-2">End of page.</p> : 

@@ -12,6 +12,7 @@ import GridPostList from "@/lib/shared/GridPostList"
 import Loader from "@/lib/shared/Loader"
 import PostStats from "@/lib/shared/PostStats"
 import { multiFormatDateString } from "@/lib/utils"
+import { Models } from "appwrite"
 import { useEffect } from "react"
 import { useInView } from "react-intersection-observer"
 import { Link, useNavigate, useParams } from "react-router-dom"
@@ -112,7 +113,7 @@ function PostDetails() {
         <div className="w-full flex justify-start max-w-5xl flex-col gap-7">
           <h2 className="body-bold">More related Posts</h2>
           { posts.pages.map((post_, index) => (
-            <GridPostList key={`page-${index}`} posts={post_?.documents.filter((item) => item !== post)}/>
+            <GridPostList key={`page-${index}`} posts={post_?.documents.filter((item: Models.Document) => item !== post)}/>
           ))}
         </div>)}
         <div className="mt-10" ref={ref}>

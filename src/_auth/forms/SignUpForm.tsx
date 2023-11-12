@@ -25,7 +25,7 @@ function SignUpForm() {
   const { toast } = useToast()
   const { mutateAsync: createUserAccount, isPending } = useCreateNewUser()
   const { mutateAsync: getUserSession } = useSignIn()
-  const { checkUser, isLoading } = useUserAuth()
+  const { checkUser } = useUserAuth()
   const navigate = useNavigate()
 
   const form = useForm<z.infer<typeof SignUpValidation>>({

@@ -136,16 +136,22 @@ export const useDeletePost = () => {
 
 export const useGetPosts = () => {
     return useInfiniteQuery({
-        queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
-        queryFn: getInfinitePosts,
-        getNextPageParam: (lastPage) => {
-            if (lastPage && lastPage.documents.length === 0) return null
-            const lastId = lastPage?.documents[lastPage.documents.length - 1].$id
-            return lastId 
+      queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
+      queryFn: ({ pageParam }: { pageParam: number }) => getInfinitePosts({ pageParam }),
+      getNextPageParam: (lastPage: any) => {
+        // If there's no data, there are no more pages.
+        if (lastPage && lastPage.documents.length === 0) {
+          return null;
         }
+        // Use the $id of the last document as the cursor.
+        const lastId = lastPage.documents[lastPage.documents.length - 1].$id;
+        return lastId;
+      },
+      initialPageParam: 0, // Add the initialPageParam property here
     });
-};
+  };
 
+  
 export const useSearchPosts = (searchTerm: string) => {
     return useQuery({
         queryKey: [QUERY_KEYS.SEARCH_POSTS, searchTerm],
@@ -166,25 +172,27 @@ export const useGetInfinitePosts = () => {
     return useInfiniteQuery({
         queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
         queryFn: getInfiniteRecentPosts,
-        getNextPageParam: (lastPage) => {
+        getNextPageParam: (lastPage: any) => {
             if (lastPage && lastPage.documents.length === 0) return null
             const lastId = lastPage?.documents[lastPage.documents.length -1].$id
             return lastId
-        }
+        },
+        initialPageParam: 0,
     })
 }
 
 export const useGetInfiniteUsers = () => {
     return useInfiniteQuery({
-        queryKey: [QUERY_KEYS.GET_USERS],
-        queryFn: getInfiniteUsers,
-        getNextPageParam: (lastPage) => {
-            if (lastPage && lastPage.documents.length === 0) return null
-            const lastId = lastPage?.documents[lastPage.documents.length -1].$id
-            return lastId
-        }
-    })
-}
+      queryKey: [QUERY_KEYS.GET_USERS],
+      queryFn: getInfiniteUsers,
+      getNextPageParam: (lastPage: any) => {
+        if (lastPage && lastPage.documents.length === 0) return null;
+        const lastId = lastPage?.documents[lastPage.documents.length - 1].$id;
+        return lastId;
+      },
+      initialPageParam: 0,
+    });
+  };
 
 export const useGetUser = (userId: string) => {
     return useQuery({
