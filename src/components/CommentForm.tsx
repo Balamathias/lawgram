@@ -8,6 +8,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form"
 import { Textarea } from "./ui/textarea"
@@ -73,6 +74,7 @@ function CommentForm({comment, postId, action}:{comment?: Models.Document, postI
           name="comment"
           render={({ field }) => (
             <FormItem>
+              <FormLabel className="hidden">Add comment</FormLabel>
               <FormControl>
                 <Textarea className="shad-comment-textarea custom-scrollbar" placeholder="Say something about this post" {...field} />
               </FormControl>
