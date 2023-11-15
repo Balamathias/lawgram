@@ -54,7 +54,7 @@ function SignInForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 w-full flex flex-col gap-5">
           <div className="flex items-center gap-x-2">
             <img
-              src="/assets/images/slide_1.png"
+              src="/assets/images/mainlogo.png"
               className="object-cover rounded-full"
               width={40}
               height={40}

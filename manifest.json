@@ -18,6 +18,12 @@
         "type": "image/png"
       },
       {
+        "src": "/mainlogo.png",
+        "sizes": "2000x2000",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
         "src": "/logo_2.png",
         "sizes": "1024x1024",
         "type": "image/png",
