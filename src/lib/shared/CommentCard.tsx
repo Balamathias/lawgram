@@ -7,8 +7,8 @@ function CommentCard({comment}: {comment: Models.Document}) {
     
     return (
     <div className="post-card shadow-lg backdrop-blur-lg bg-transparent">
-        <div className=" flex flex-col gap-6 w-full">
-            <div className="flex items-center gap-3">
+        <div className=" flex flex-col gap-2 w-full">
+            <div className="flex items-center gap-2">
                 <Link to={`/profile/${comment?.user?.$id}`}>
                     <img 
                     src={comment?.user?.profileImage || '/assets/icons/profile-placeholder.svg'}
@@ -16,7 +16,7 @@ function CommentCard({comment}: {comment: Models.Document}) {
                     className="w-12 lg:h-12 object-cover rounded-full" 
                     />
                 </Link>
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-2">
                     <p className="base-medium flex items-center gap-2 text-light-2 lg:body-bold">
                         <span>{comment?.user?.name}</span> {comment?.user?.email === 'balamathias40@gmail.com' && 
                         <img
@@ -31,8 +31,8 @@ function CommentCard({comment}: {comment: Models.Document}) {
                     </div>
                 </div>
             </div>
-            <div className="small-medium lg:base-medium py-5">
-                <p className="base-medium tracking-normal text-light-2 leading-9">{comment.comment}</p>
+            <div className="small-medium lg:base-medium py-2">
+                <p className="subtle-medium tracking-normal text-light-2 leading-9">{comment.comment}</p>
             </div>
             {comment?.imageUrl && <img 
                 src={comment.imageUrl || '/assets/icons/profile-placeholder.svg'} 

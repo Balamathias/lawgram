@@ -16,16 +16,15 @@ import { Input } from "@/components/ui/input"
 import { UpdateProfileValidation } from "@/lib/validations"
 import { useNavigate } from "react-router-dom"
 
-import { useToast } from "@/components/ui/use-toast"
 import { useUpdateUser } from "@/lib/react-query/queriesAndMutations"
 import Loader from "@/lib/shared/Loader"
 import { Models } from "appwrite"
 import FileUploader from "@/lib/shared/FileUploader"
 import { Textarea } from "./ui/textarea"
+import toast from "react-hot-toast"
 
 function ProfileForm({user}: {user?: Models.Document}) {
 
-  const { toast } = useToast()
   const { mutateAsync: updateUser, isPending } = useUpdateUser()
   const navigate = useNavigate()
 
@@ -50,8 +49,9 @@ function ProfileForm({user}: {user?: Models.Document}) {
             imageId: user?.imageId,
         })
 
-        if (!updatedUser) return toast({description: "Could not be updated, please try again."})
+        if (!updatedUser) return toast.error("Could not be updated, please try again.")
 
+        toast.success("Account updated successfully.")
         return navigate(`/profile/${user.$id}`)
 
         }

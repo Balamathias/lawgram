@@ -52,6 +52,8 @@ function PostForm({post, action}:{post?: Models.Document, action?: 'Create' | 'U
 
         if (!updatedPost) return toast.error("Post could not be updated, please try again.")
 
+        toast.success("Post Updated successfully.")
+
         return navigate(`/posts/${post.$id}`)
 
         }

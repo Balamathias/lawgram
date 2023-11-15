@@ -82,7 +82,7 @@ function CommentForm({comment, postId, action}:{comment?: Models.Document, postI
             </FormItem>
           )}
         />
-        <Button type="submit" className="bg-primary-600 w-fit shad-button whitespace-nowrap">
+        <Button type="submit" className="bg-primary-600 shad-button whitespace-nowrap rounded-[50px]">
             {isPending ? (
                 <div className="flex gap-3 items-center">
                     <Loader />

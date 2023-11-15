@@ -4,10 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Offline</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset default styles */
+        body, html {
+        margin: 0;
+        padding: 0;
+        }
+
+        /* Apply styles */
+        body {
+        background-color: #111;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: 'Roboto', sans-serif;
+        }
+
+        .offline-message {
+        text-align: center;
+        padding: 20px;
+        color: rgb(238, 84, 84);
+        font-size: 1.1rem;
+        background-color: #200b0b;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        border: 2px solid red;
+        width: 300px;
+        transition: transform 0.3s ease-in-out;
+        }
+
+        .offline-message:hover {
+        transform: scale(1.05);
+        }
+
+        /* Media query for responsiveness */
+        @media (max-width: 480px) {
+        .offline-message {
+            width: 90%;
+            font-size: 1.2rem;
+        }
+        }
+    </style>
 </head>
 <body>
-    <div class="flex w-full text-primary-500 font-bold">
-        You are offline bro! Go online to flex lawgram
+    <div class="offline-message">
+        You are offline, You can use LawGram when you go online
     </div>
 </body>
 </html>
