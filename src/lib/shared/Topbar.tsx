@@ -23,7 +23,7 @@ function Topbar() {
 
             <div className="flex gap-3 items-center">
                 <Button onClick={() => signOut()} variant="ghost" className="shad-button_ghost">
-                    <img src="/assets/icons/logout.svg"/> 
+                    <img src="/assets/icons/logout.svg" alt="logout"/> 
                 </Button>
                 <Link to={`/profile/${user?.$id}`} className="flex-center">
                     <img

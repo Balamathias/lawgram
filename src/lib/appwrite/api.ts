@@ -1,4 +1,4 @@
-import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types"
+import { INewComment, INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types"
 import { account, appwriteConfig, avatars, databases, storage } from "./config"
 import { ID, Query } from "appwrite"
 import { URL } from "url"
@@ -132,7 +132,8 @@ export async function createPost(post: INewPost) {
     }
 }
 
-export async function uploadFile(file: File) {
+export async function uploadFile(file: File | undefined) {
+    if (!file) throw new Error("No file was provided for upload.")
     const promise = await storage.createFile(
         appwriteConfig.storageId,
         ID.unique(),
@@ -327,7 +328,7 @@ export async function updatePost(post: IUpdatePost) {
         )
 
         if (!updatedPost) {
-            deleteFile(post.imageId)
+            deleteFile(image.imageId)
             throw Error
         }
 
@@ -499,3 +500,62 @@ export async function getUserById(userId: string) {
         return error
     }
 }
+
+export async function addPostComment(comment: INewComment) {
+    try {
+        let uploadedFile
+        let fileUrl: URL | null = null
+        let newComment = {}
+
+        if (comment?.file?.length > 0) {
+            uploadedFile = uploadFile(comment?.file?.at(0)) || null
+            if (!uploadedFile) throw Error
+            fileUrl = await getFilePreview((await uploadedFile).$id)
+    
+            if (!fileUrl) {
+                deleteFile((await uploadedFile).$id)
+                throw Error
+            }
+        }
+
+        newComment = await databases.createDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.commentsCollectionId,
+            ID.unique(),
+            {
+                post: comment.post,
+                user: comment.user,
+                comment: comment.comment,
+                imageUrl: fileUrl,
+                imageId: uploadedFile ? (await uploadedFile)?.$id : null,                    
+            }
+        )
+
+        if (!newComment) {
+            uploadedFile ? deleteFile((await uploadedFile)?.$id) : null
+            throw Error
+        }
+
+        return newComment
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+}
+
+export async function getPostComments(postId: string) {
+    const queries = [Query.equal("post", postId), Query.orderDesc('$createdAt')]
+    try {
+      const comments = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.commentsCollectionId,
+        queries
+      );
+  
+      if (!comments) throw Error;
+  
+      return comments;
+    } catch (error) {
+      console.log(error);
+    }
+  }

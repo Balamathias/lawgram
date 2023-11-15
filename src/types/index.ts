@@ -21,6 +21,15 @@ export type INavLink = {
     tags?: string;
   };
   
+  export type INewComment = {
+    user: string;
+    post: string;
+    comment: string;
+    file: File[] | [];
+    imageId?: string;
+    imageUrl?: string;
+  };
+  
   export type IUpdatePost = {
     postId: string;
     caption: string;

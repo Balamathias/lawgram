@@ -19,7 +19,7 @@ function PostCard({post}: {post: Models.Document}) {
                     />
                 </Link>
                 <div className="flex flex-col gap-3">
-                    <p className="base-medium flex items-center gap-2 text-light-2 lg:body-bold"><span>{post?.creator?.name}</span> . {post?.creator?.email === 'balamathias40@gmail.com' && <img
+                    <p className="base-medium flex items-center gap-2 text-light-2 lg:body-bold"><span>{post?.creator?.name}</span> {post?.creator?.email === 'balamathias40@gmail.com' && <img
                         src="/assets/icons/twitter-verified-badge.svg"
                         alt="badge"
                         width={20}
@@ -44,15 +44,17 @@ function PostCard({post}: {post: Models.Document}) {
             <div className="small-medium lg:base-medium py-5">
                 <p className="base-medium tracking-normal text-light-2 leading-9">{post.caption}</p>
                 <ul className="flex gap-1 mt-2">
-                    {post.tags.map((tag: string) => <Link to={`/posts/tags?tag=${tag}`} className="text-primary-600" key={tag}>#{tag}</Link>)}
+                    {post.tags.map((tag: string) => <li>
+                        <Link to={`/posts/tags?tag=${tag}`} className="text-primary-600" key={tag}>#{tag}</Link>
+                    </li>)}
                 </ul>
             </div>
         </Link>
-        <img 
+        {post?.imageUrl && <img 
             src={post.imageUrl || '/assets/icons/profile-placeholder.svg'} 
             alt="post-mage" 
             className="post-card_img" 
-        />
+        />}
         <PostStats post={post} userId={user.id} />
     </div>
   )

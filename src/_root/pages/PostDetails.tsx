@@ -7,7 +7,8 @@ import {
 import { useToast } from "@/components/ui/use-toast"
 
 import { useUserAuth } from "@/context/AuthContext"
-import { useDeletePost, useGetPostById, useGetPosts } from "@/lib/react-query/queriesAndMutations"
+import { useDeletePost, useGetPostById, useGetPostComments, useGetPosts } from "@/lib/react-query/queriesAndMutations"
+import CommentForm from "@/components/CommentForm"
 import GridPostList from "@/lib/shared/GridPostList"
 import Loader from "@/lib/shared/Loader"
 import PostStats from "@/lib/shared/PostStats"
@@ -16,17 +17,21 @@ import { Models } from "appwrite"
 import { useEffect } from "react"
 import { useInView } from "react-intersection-observer"
 import { Link, useNavigate, useParams } from "react-router-dom"
+import CommentCard from "@/lib/shared/CommentCard"
 
 function PostDetails() {
   const {data: posts, fetchNextPage, hasNextPage} = useGetPosts()
   const {ref, inView} = useInView()
-
+  
   const {id} = useParams()
   const {data: post, isPending} = useGetPostById(id || '')
   const { user } = useUserAuth()
   const {mutateAsync: deletePost, isPending: isDeleting} = useDeletePost()
   const {toast} = useToast()
   const navigate = useNavigate()
+
+  const {data: comments, isPending: isCommentsPending} = useGetPostComments(post?.$id || '')
+  console.log(comments)
 
   useEffect(()=>{
     if (inView) fetchNextPage()
@@ -59,7 +64,14 @@ function PostDetails() {
                   className="w-12 lg:h-12 object-cover rounded-full" 
                   />
                   <div className="flex flex-col gap-3">
-                      <p className="base-medium text-light-2 lg:body-bold">{post?.creator?.name}</p>
+                      <p className="base-medium flex gap-2 items-center text-light-2 lg:body-bold">
+                      <span>{post?.creator?.name}</span> {post?.creator?.email === 'balamathias40@gmail.com' && <img
+                        src="/assets/icons/twitter-verified-badge.svg"
+                        alt="badge"
+                        width={20}
+                        height={20}
+                    />}
+                      </p>
                       <div className="flex flex-center gap-3">
                           <p className="subtle-semibold lg:small-regular">{multiFormatDateString(post?.$createdAt)}</p>
                           -
@@ -111,6 +123,20 @@ function PostDetails() {
               </div>
             </div>
         </div>
+          <div className="w-full">
+            <CommentForm postId={post?.$id || ''} />
+
+        <div className="w-full flex justify-start max-w-5xl flex-col gap-7">
+          {comments?.documents.length === 0 ? 
+            <p className="subtle-medium text-light-2 py-6">No comments for this post yet.</p> :<>
+            <h2 className="body-bold mt-6">Comments</h2>
+            <div className="w-full max-w-5xl flex-col flex gap-5 py-7">
+              {comments?.documents.map(comment => <CommentCard comment={comment} key={comment.$id} />)}
+            </div></>}
+            {isCommentsPending && <Loader />}
+          </div>
+        </div>
+
         {!posts ? <Loader /> : (
         <div className="w-full flex justify-start max-w-5xl flex-col gap-7">
           <h2 className="body-bold">More related Posts</h2>

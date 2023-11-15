@@ -23,5 +23,7 @@ export enum QUERY_KEYS {
 
     GET_POSTS_BY_TAG = 'getPostsByTag',
 
-    GET_USER_INFINITE_POSTS = 'getUserInfinitePosts'
+    GET_USER_INFINITE_POSTS = 'getUserInfinitePosts',
+
+    GET_POST_COMMENTS = 'getPostComments',
 }

@@ -1,0 +1,17 @@
+{
+    "name": "LawGram",
+    "short_name": "LawGram",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#000000",
+    "icons": [
+      {
+        "src": "/logo.png",
+        "sizes": "1024x1024",
+        "type": "image/png",
+        "purpose": "any maskable"
+      }
+    ]
+  }
+  

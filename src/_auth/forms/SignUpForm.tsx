@@ -16,13 +16,12 @@ import { Input } from "@/components/ui/input"
 import { SignUpValidation } from "@/lib/validations"
 import { Link, useNavigate } from "react-router-dom"
 
-import { useToast } from "@/components/ui/use-toast"
 import { useCreateNewUser, useSignIn } from "@/lib/react-query/queriesAndMutations"
 import Loader from "@/lib/shared/Loader"
 import { useUserAuth } from "@/context/AuthContext"
+import toast from "react-hot-toast"
 
 function SignUpForm() {
-  const { toast } = useToast()
   const { mutateAsync: createUserAccount, isPending } = useCreateNewUser()
   const { mutateAsync: getUserSession } = useSignIn()
   const { checkUser } = useUserAuth()
@@ -40,17 +39,18 @@ function SignUpForm() {
  
   async function onSubmit(values: z.infer<typeof SignUpValidation>) {
     const user = await createUserAccount(values)
-    if (!user) return toast({description: "Sign up failed, Please try again.", variant: "destructive"})
+    if (!user) return toast.error("Sign up failed, Please try again.")
 
     const session = await getUserSession({email: values.email, password: values.password})
 
-    if (!session) return toast({description: "Sign up failed, Please try again.", variant: "destructive"})
+    if (!session) return toast.error("Sign up failed, Please try again.")
 
     const isLoggedIn = await checkUser()
     if (isLoggedIn) {
       form.reset()
+      toast.success('Account created successfully.')
       navigate('/')
-    } else return toast({description: "Sign up failed, Please try again.", variant: "destructive"})
+    } else return toast.error("Sign up failed, Please try again.")
   }
   
   return (
@@ -60,13 +60,13 @@ function SignUpForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 w-full flex flex-col gap-1">
           <div className="flex items-center gap-x-2">
             <img
-              src="/assets/images/slide_2.svg"
+              src="/assets/images/slide_1.png"
               className="object-cover rounded-full"
               width={40}
               height={40}
               alt="logo"
             />
-            <span className="font-bold text-xl text-orange-500">Lawgram.</span>
+            <span className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">Lawgram.</span>
           </div>
           <h2 className="font-bold text-lg py-1">Create an account.</h2>
           <p className="text-sm font-thin">Hi there! Create an account on Lawgram to stay up to date with our trending feeds.</p>

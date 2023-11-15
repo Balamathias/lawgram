@@ -22,6 +22,13 @@ export const PostValidation = z.object({
   tags: z.string()
 })
 
+export const CommentValidation = z.object({
+  comment: z.string().min(2, {
+    message: "Comment must be at least 2 characters.",
+  }).max(2200, {message: "Comment too long! Post should not exceed 2200 words."}),
+  file: z.custom<File[]>(),
+})
+
 export const UpdateProfileValidation = z.object({
   name: z.string().min(2, {message: "Name is too short."}),
   username: z.string().min(2, {message: "Username is too short"}),

@@ -16,13 +16,12 @@ import { Input } from "@/components/ui/input"
 import { SignInValidation } from "@/lib/validations"
 import { Link, useNavigate } from "react-router-dom"
 
-import { useToast } from "@/components/ui/use-toast"
 import { useSignIn } from "@/lib/react-query/queriesAndMutations"
 import Loader from "@/lib/shared/Loader"
 import { useUserAuth } from "@/context/AuthContext"
+import toast from "react-hot-toast"
 
 function SignInForm() {
-  const { toast } = useToast()
   const { mutateAsync: getUserSession, isPending } = useSignIn()
   const { checkUser } = useUserAuth()
   const navigate = useNavigate()
@@ -38,13 +37,14 @@ function SignInForm() {
   async function onSubmit(values: z.infer<typeof SignInValidation>) {
     const session = await getUserSession({email: values.email, password: values.password})
 
-    if (!session) return toast({description: "Sign In failed, Please try again.", variant: "destructive"})
+    if (!session) return toast.error("Sign In failed, Please try again.")
 
     const isLoggedIn = await checkUser()
     if (isLoggedIn) {
       form.reset()
+      toast.success("Signed In Successfully.")
       navigate('/')
-    } else return toast({description: "Sign In failed, Please try again.", variant: "destructive"})
+    } else return toast("Sign In failed, Please try again.")
   }
   
   return (
@@ -54,13 +54,13 @@ function SignInForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 w-full flex flex-col gap-5">
           <div className="flex items-center gap-x-2">
             <img
-              src="/assets/images/slide_2.svg"
+              src="/assets/images/slide_1.png"
               className="object-cover rounded-full"
               width={40}
               height={40}
               alt="logo"
             />
-            <span className="font-bold text-xl text-orange-500">Lawgram.</span>
+            <span className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">Lawgram.</span>
           </div>
           <h2 className="font-bold text-lg py-2">Login to your account.</h2>
           <p className="text-sm font-thin">Welcome back, we are happy to have you back, now you can log in to your account to stay up to date.</p>

@@ -17,10 +17,10 @@ import FileUploader from "@/lib/shared/FileUploader"
 import { Models } from "appwrite"
 import { PostValidation } from "@/lib/validations"
 import { useUserAuth } from "@/context/AuthContext"
-import { toast } from "./ui/use-toast"
 import { useCreatePost, useUpdatePost } from "@/lib/react-query/queriesAndMutations"
 import { useNavigate } from "react-router-dom"
 import Loader from "@/lib/shared/Loader"
+import toast from "react-hot-toast"
 
 
 function PostForm({post, action}:{post?: Models.Document, action?: 'Create' | 'Update'}) {
@@ -50,7 +50,7 @@ function PostForm({post, action}:{post?: Models.Document, action?: 'Create' | 'U
             imageId: post?.imageId,
         })
 
-        if (!updatedPost) return toast({description: "Post could not be updated, please try again."})
+        if (!updatedPost) return toast.error("Post could not be updated, please try again.")
 
         return navigate(`/posts/${post.$id}`)
 
@@ -61,10 +61,11 @@ function PostForm({post, action}:{post?: Models.Document, action?: 'Create' | 'U
             userId: user.id
         })
 
-        if (!newPost) return toast({description: "Post could not be created, please try again."})
+        if (!newPost) return toast.error("Post could not be created, please try again.")
 
         if (newPost) {
             form.reset()
+            toast.success("Post added Successfully.")
             navigate('/')
         }
     }

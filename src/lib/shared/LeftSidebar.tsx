@@ -23,13 +23,13 @@ function LeftSidebar() {
         <div className="flex flex-col gap-11">
             <Link to={'/'} className="flex items-center gap-x-2">
                 <img
-                    src="/assets/images/slide_2.svg"
+                    src="/assets/images/slide_1.png"
                     className="object-cover rounded-full"
                     width={40}
                     height={40}
                     alt="logo"
                 />
-                <span className="font-bold text-xl text-primary-600">Lawgram.</span>
+                <span className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-violet-100">Lawgram.</span>
             </Link>
             <Link to={`/profile/${user?.id}`} className="flex gap-3 items-center">
                 <img

@@ -14,7 +14,7 @@ function AuthLayout() {
         </section>
 
         <img
-          src="/assets/images/slide_3.svg"
+          src="/assets/images/slide_1.png"
           className="h-full w-1/2 bg-no-repeat bg-transparent object-cover hidden xl:block"
           alt="Side Image"
         />

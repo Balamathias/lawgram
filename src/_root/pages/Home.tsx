@@ -26,7 +26,9 @@ export default function Home() {
           </h2>
           {posts.pages.map((post, index) => <ul className="flex flex-1 flex-col gap-9 w-full" key={`home-post-${index}`}>
               {post?.documents.map((post: Models.Document) => (
-                <PostCard key={post.$id} post={post} />
+                <li>
+                  <PostCard key={post.$id} post={post} />
+                </li>
               ))}
             </ul>)}
           <div className="mt-10" ref={ref}>
