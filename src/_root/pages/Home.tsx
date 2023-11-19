@@ -1,4 +1,5 @@
 import { useGetInfinitePosts} from "@/lib/react-query/queriesAndMutations"
+import Error from "@/lib/shared/Error"
 import Loader from "@/lib/shared/Loader"
 import PostCard from "@/lib/shared/PostCard"
 import { Models } from "appwrite"
@@ -6,7 +7,7 @@ import { useEffect } from "react"
 import { useInView } from "react-intersection-observer"
 
 export default function Home() {
-  const {data: posts, fetchNextPage, hasNextPage} = useGetInfinitePosts()
+  const {data: posts, fetchNextPage, hasNextPage, error} = useGetInfinitePosts()
   const { ref, inView } = useInView()
 
   useEffect(()=>{
@@ -16,6 +17,8 @@ export default function Home() {
   if (!posts) return <div className="flex w-full h-full">
     <Loader/>
   </div>
+
+  if (error) return <Error />
 
   return (
     <div className="flex flex-1">

@@ -35,7 +35,7 @@ function ProfileForm({user}: {user?: Models.Document}) {
       username: user ? user.username : "",
       email: user ? user.email : "",
       bio: user ? user?.bio : "",
-      file: user ? [user?.profileImage] : []
+      file: user ? user?.profileImage : []
     },
   })
     

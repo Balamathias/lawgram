@@ -66,7 +66,7 @@ function SignUpForm() {
               height={40}
               alt="logo"
             />
-            <span className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">Lawgram.</span>
+            <span className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">LawGram.</span>
           </div>
           <h2 className="font-bold text-lg py-1">Create an account.</h2>
           <p className="text-sm font-thin">Hi there! Create an account on Lawgram to stay up to date with our trending feeds.</p>

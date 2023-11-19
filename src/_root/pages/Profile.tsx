@@ -1,6 +1,6 @@
 import { useGetCurrentUser, useGetUser, useGetUserPosts } from "@/lib/react-query/queriesAndMutations"
 import Loader from "@/lib/shared/Loader"
-import { Link, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import GridPostList from "@/lib/shared/GridPostList"
 import ProcessedPost from "../ProcessedPost"
@@ -9,9 +9,14 @@ function Profile() {
   const {id} = useParams()
   const {data: user, isPending} = useGetUser(id || '')
   const {data: currentUser} = useGetCurrentUser()
-  const {data: posts, isPending: isGettingUserPosts} = useGetUserPosts(id || '')
-
+  
+  const {data: posts, isPending: isGettingUserPosts} = useGetUserPosts(user?.$id || '')
+  const navigate = useNavigate()
+  
   if (isPending) return <Loader/>
+  
+
+  if (!user) return navigate('/not-found')
 
   return (
     <div className="flex flex-1">
@@ -61,26 +66,11 @@ function Profile() {
                 Picture
               </p>
             </TabsTrigger>
-            <TabsTrigger value="reels" className="rounded-lg py-4 px-6 bg-dark-4 shadow">
-              <img
-                src="/assets/icons/add-post.svg"
-                alt="pictures"
-                width={18}
-                height={18}
-              />
-              <p className="small-medium ml-2 text-light-3">
-                Reels
-              </p>
-            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="pictures" className='flex w-full max-w-5xl flex-col gap-4 py-6'>
             <h3 className="h3-bold md:h2-bold tracking-widest text-light-2"><span className="text-primary-600">{posts?.documents?.length}</span> post{posts?.documents?.length === 1 ? '': 's'}.</h3>
             {isGettingUserPosts ? <Loader /> : <GridPostList posts={posts?.documents} showUser={false}/>}
-          </TabsContent>
-          <TabsContent value="reels" className='flex w-full max-w-5xl flex-col gap-4 py-6'>
-            <h3 className="h3-bold md:h2-bold tracking-widest text-light-2"><span className="text-primary-600">{posts?.documents?.length}</span> post{posts?.documents?.length === 1 ? '': 's'}.</h3>
-            {isGettingUserPosts ? <Loader /> : <h2 className="base-medium">Reels Coming soon</h2>}
           </TabsContent>
         </Tabs>
       </div>

@@ -9,11 +9,16 @@ function GridPostList({posts, showUser=true, showStats=true}: {posts?: Models.Do
     <ul className="grid-container">
         {posts?.map(post => <li key={post?.$id} className="relative w-min-80 h-80">
             <Link to={`/posts/${post.$id}`} className="grid-post_link">
+                {post?.imageUrl ? (
                 <img
                     src={post?.imageUrl}
                     alt="explore-image"
                     className="w-full h-full object-cover"
-                />
+                />) : (
+                    <p className="small-medium flex-center p-2">
+                        <span>{post?.caption?.slice(0, 144) + '...'}</span>
+                    </p>
+                )}
             </Link>
             <div className="grid-post_user">
                 {showUser && <div className="flex items-center gap-2 flex-1">

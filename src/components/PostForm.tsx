@@ -65,11 +65,9 @@ function PostForm({post, action}:{post?: Models.Document, action?: 'Create' | 'U
 
         if (!newPost) return toast.error("Post could not be created, please try again.")
 
-        if (newPost) {
-            form.reset()
-            toast.success("Post added Successfully.")
-            navigate('/')
-        }
+        form.reset()
+        toast.success("Post added Successfully.")
+        return navigate('/')
     }
 
     return (

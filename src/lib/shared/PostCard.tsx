@@ -21,7 +21,7 @@ function PostCard({post}: {post: Models.Document}) {
                     />
                 </Link>
                 <div className="flex flex-col gap-3">
-                    <p className="base-medium flex items-center gap-2 text-light-2 lg:body-bold"><span>{post?.creator?.name}</span> {post?.creator?.email === 'balamathias40@gmail.com' && <img
+                    <p className="base-medium flex items-center gap-2 text-light-2 lg:body-bold"><span>@{post?.creator?.username}</span> {post?.creator?.email === 'balamathias40@gmail.com' && <img
                         src="/assets/icons/twitter-verified-badge.svg"
                         alt="badge"
                         width={20}
@@ -45,12 +45,13 @@ function PostCard({post}: {post: Models.Document}) {
         <Link to={`/posts/${post.$id}`}>
             <div className="small-medium lg:base-medium py-5">
                 <div className="base-medium tracking-normal text-light-2 leading-9">
-                    <ProcessedPost content={post?.caption} />
+                    <ProcessedPost content={post?.caption.slice(0, 496) + `${post?.caption?.at(497) ? '...' : ''}`} />
+                    {post?.caption?.at(497) ? <Link to={'/posts/' + post?.$id} className="text-fuchsia-400">...see more</Link> : ''}
                 </div>
                 <ul className="flex gap-1 mt-2">
-                    {post.tags.map((tag: string) => <li>
-                        <Link to={`/posts/tags?tag=${tag}`} className="text-primary-600" key={tag + Math.random()}>#{tag}</Link>
-                    </li>)}
+                    {post.tags.length > 0 ? (post.tags.map((tag: string) => <li>
+                        <Link to={`/posts/tags?tag=${tag}`} className="text-primary-600" key={tag + Math.random()}>{tag && '#' }{tag}</Link>
+                    </li>)): ''}
                 </ul>
             </div>
         </Link>

@@ -33,10 +33,10 @@ function PostStats({post, userId}: {post?: Models.Document, userId: string}) {
         e.stopPropagation()
 
         let newLikes = [...likes]
-        const hasLiked = newLikes.includes(userId)
+        const hasLiked = newLikes?.includes(userId)
 
         if (hasLiked) {
-            newLikes = newLikes.filter(user => user !== userId)
+            newLikes = newLikes?.filter(user => user !== userId)
         } else newLikes.push(userId)
         setLikes(newLikes)
 
@@ -71,7 +71,7 @@ function PostStats({post, userId}: {post?: Models.Document, userId: string}) {
                 alt="like"
                 className="cursor-pointer"
             />
-            <p className="small-medium lg:base-medium ml-1 mr-1">{likes.length}</p>
+            <p className="small-medium lg:base-medium ml-1 mr-1">{likes?.length}</p>
         </div>
         <div className="flex flex-center gap-1">
             <img

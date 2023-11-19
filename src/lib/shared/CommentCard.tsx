@@ -26,7 +26,7 @@ function CommentCard({comment}: {comment: Models.Document}) {
                 </Link>
                 <div className="flex flex-col gap-2">
                     <p className="base-medium flex items-center gap-2 text-light-2 lg:body-bold">
-                        <span>{comment?.user?.name}</span> {comment?.user?.email === 'balamathias40@gmail.com' && 
+                        <span>@{comment?.user?.username}</span> {comment?.user?.email === 'balamathias40@gmail.com' && 
                         <img
                         src="/assets/icons/twitter-verified-badge.svg"
                         alt="badge"

@@ -127,7 +127,7 @@ export const useDeletePost = () => {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: ({postId, imageId}: {postId: string, imageId: string}) => deletePost(postId, imageId),
+        mutationFn: ({postId, imageId}: {postId: string, imageId?: string}) => deletePost(postId, imageId),
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: [QUERY_KEYS.GET_RECENT_POSTS]})
         }
@@ -140,11 +140,11 @@ export const useGetPosts = () => {
       queryFn: ({ pageParam }: { pageParam: number }) => getInfinitePosts({ pageParam }),
       getNextPageParam: (lastPage: any) => {
         // If there's no data, there are no more pages.
-        if (lastPage && lastPage.documents.length === 0) {
+        if (lastPage && lastPage?.documents?.length === 0) {
           return null;
         }
         // Use the $id of the last document as the cursor.
-        const lastId = lastPage.documents[lastPage.documents.length - 1].$id;
+        const lastId = lastPage?.documents[lastPage?.documents?.length - 1].$id;
         return lastId;
       },
       initialPageParam: 0, // Add the initialPageParam property here

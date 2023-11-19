@@ -37,14 +37,14 @@ function SignInForm() {
   async function onSubmit(values: z.infer<typeof SignInValidation>) {
     const session = await getUserSession({email: values.email, password: values.password})
 
-    if (!session) return toast.error("Sign In failed, Please try again.")
+    if (!session) return toast.error("Sign In failed, Please try again. Ensure your email or password is correct")
 
     const isLoggedIn = await checkUser()
     if (isLoggedIn) {
       form.reset()
       toast.success("Signed In Successfully.")
       navigate('/')
-    } else return toast("Sign In failed, Please try again.")
+    } else return toast("Sign In failed, Please try again. Ensure your email or password is correct.")
   }
   
   return (
@@ -60,7 +60,7 @@ function SignInForm() {
               height={40}
               alt="logo"
             />
-            <span className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">Lawgram.</span>
+            <span className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">LawGram.</span>
           </div>
           <h2 className="font-bold text-lg py-2">Login to your account.</h2>
           <p className="text-sm font-thin">Welcome back, we are happy to have you back, now you can log in to your account to stay up to date.</p>

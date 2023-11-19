@@ -4,7 +4,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { useToast } from "@/components/ui/use-toast"
 
 import { useUserAuth } from "@/context/AuthContext"
 import { useDeletePost, useGetPostById, useGetPostComments, useGetPosts } from "@/lib/react-query/queriesAndMutations"
@@ -20,6 +19,7 @@ import { Link, useNavigate, useParams } from "react-router-dom"
 import CommentCard from "@/lib/shared/CommentCard"
 import ProcessedPost from "../ProcessedPost"
 import useCopyLink from "@/parsers/useCopyLink"
+import toast from "react-hot-toast"
 
 function PostDetails() {
   const {data: posts, fetchNextPage, hasNextPage} = useGetPosts()
@@ -29,7 +29,6 @@ function PostDetails() {
   const {data: post, isPending} = useGetPostById(id || '')
   const { user } = useUserAuth()
   const {mutateAsync: deletePost, isPending: isDeleting} = useDeletePost()
-  const {toast} = useToast()
   const navigate = useNavigate()
 
   const {isCopied, copyLink} = useCopyLink()
@@ -44,7 +43,7 @@ function PostDetails() {
     deletePost({postId: post?.$id || '', imageId: post?.imageId},{
       onSuccess() {
           navigate('/')
-          return toast({description: "Post deleted successfully."})
+          return toast.success("Post deleted successfully.")
       },
     })
   }
@@ -53,11 +52,11 @@ function PostDetails() {
   return (
     <div className="post_details-container">
         <div className="post_details-card">
-            <img
+            {post?.imageUrl && <img
               src={post?.imageUrl}
               alt="post"
               className="post_details-img"
-            />
+            />}
             <div className="post_details-info">
               <div className="flex-between w-full">
                 <Link to={`/profile/${post?.creator?.$id}`} className="flex items-center gap-4">
@@ -68,7 +67,7 @@ function PostDetails() {
                   />
                   <div className="flex flex-col gap-3">
                       <p className="base-medium flex gap-2 items-center text-light-2 lg:body-bold">
-                      <span>{post?.creator?.name}</span> {post?.creator?.email === 'balamathias40@gmail.com' && <img
+                      <span>@{post?.creator?.username}</span> {post?.creator?.email === 'balamathias40@gmail.com' && <img
                         src="/assets/icons/twitter-verified-badge.svg"
                         alt="badge"
                         width={20}
@@ -142,7 +141,7 @@ function PostDetails() {
                   <ProcessedPost content={post?.caption} />
                 </div>
                 <ul className="flex gap-1 mt-2">
-                    {post?.tags.map((tag: string) => <Link to={`/posts/tags?tag=${tag}`} className="text-primary-600" key={tag}>#{tag}</Link>)}
+                    {post?.tags.map((tag: string) => <Link to={`/posts/tags?tag=${tag}`} className="text-primary-600" key={tag}>{tag && '#'}{tag}</Link>)}
                 </ul>
               </div>
               <div className="w-full">

@@ -91,16 +91,20 @@ export async function signOutAccount() {
 }
 
 export async function createPost(post: INewPost) {
+    if (!post.userId) throw new Error('A post must have a user attached to it.')
     try {
+        let uploadedFile
+        let fileUrl: URL | null = null
 
-        const uploadedFile = uploadFile(post.file[0])
-        if (!uploadedFile) throw Error
+        if (post?.file?.length > 0) {
+            uploadedFile = uploadFile(post?.file?.at(0)) || null
+            if (!uploadedFile) throw new Error("File upload failed")
+            fileUrl = await getFilePreview((await uploadedFile).$id)
 
-        const fileUrl = await getFilePreview((await uploadedFile).$id)
-
-        if (!fileUrl) {
-            deleteFile((await uploadedFile).$id)
-            throw Error
+            if (!fileUrl) {
+                uploadedFile && deleteFile((await uploadedFile).$id)
+                throw new Error("File preview generation failed")
+            }
         }
 
         const tags = post.tags?.replace(/ /g, '').toLowerCase().split(',') || []
@@ -114,20 +118,19 @@ export async function createPost(post: INewPost) {
                 caption: post.caption,
                 tags: tags,
                 imageUrl: fileUrl,
-                imageId: (await uploadedFile).$id,
+                imageId: uploadedFile ? (await uploadedFile)?.$id : null,
                 location: post.location
-                
             }
         )
 
         if (!newPost) {
-            deleteFile((await uploadedFile).$id)
-            throw Error
+            uploadedFile && deleteFile((await uploadedFile)?.$id)
+            throw new Error("Post creation failed")
         }
 
         return newPost
     } catch (error) {
-        console.log(error)
+        console.error(error)
         return error
     }
 }
@@ -339,8 +342,8 @@ export async function updatePost(post: IUpdatePost) {
     }
 }
 
-export async function deletePost(postId: string, imageId: string) {
-    if (!postId || !imageId) throw Error
+export async function deletePost(postId: string, imageId?: string) {
+    if (!postId && !imageId) throw Error
     try {
         const status = await databases.deleteDocument(
             appwriteConfig.databaseId,
@@ -449,24 +452,37 @@ export async function getUserById(userId: string) {
         userId
       );
   
-      if (!user) throw Error;
+      if (!user) throw new Error(`User with the ID ${userId} could not be found.`)
   
       return user;
     } catch (error) {
-      console.log(error);
+      try {
+        const user_by_username = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            [Query.equal('username', userId)]
+            )
+
+        if (!user_by_username) throw new Error(`User with the username ${userId}, could not be found.`)
+
+        return user_by_username.documents.at(0)
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 
-  export async function updateUser(user: IUpdateUser) {
-    const hasFileToUpload = user.file.length > 1
+export async function updateUser(user: IUpdateUser) {
+    const hasFileToUpload = user.file.length > 0 && (typeof user?.file !== 'string')
+    console.log(hasFileToUpload, user?.file)
     try {
         let image = {
             profileImage: user.profileImage,
-            imageId: user.imageId
+            imageId: user?.imageId
         }
 
         if (hasFileToUpload) {
-            const uploadedFile = uploadFile(user.file[0])
+            const uploadedFile = uploadFile(user.file.at(0))
             if (!uploadedFile) throw Error
             const fileUrl:URL = await getFilePreview((await uploadedFile).$id)
     

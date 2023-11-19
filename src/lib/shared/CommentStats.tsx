@@ -27,6 +27,7 @@ function CommentStats({comment, userId, isCopied, copyText}: ICommentStats) {
     const {mutate: likeComment} = useLikeComment()
 
     const {mutateAsync: deletePost, isPending: isDeleting} = useDeleteComment()
+    
     const queryClient = useQueryClient()
   
   const handleDeletePost = () => {
@@ -56,7 +57,7 @@ function CommentStats({comment, userId, isCopied, copyText}: ICommentStats) {
     }
 
   return (
-    <div className="flex justify-between gap-3 items-center">
+    <div className="flex justify-between gap-3 items-center relative" style={{zIndex: 290}}>
         <div className="flex flex-center gap-1">
             <img
                 src={checkIsLiked(likes, userId) ? "/assets/icons/liked.svg" :
@@ -82,23 +83,22 @@ function CommentStats({comment, userId, isCopied, copyText}: ICommentStats) {
                     className="cursor-pointer"
                     />
                 </PopoverTrigger>
-                <PopoverContent className="">
+                <PopoverContent className="absolute -top-40 right-0 px-6 rounded-lg shadow shadow-lg border-slate-700 border border-green-800">
         
-                    <div style={{zIndex: 290}} className="py-6 flex flex-col gap-3 px-6 rounded-lg shadow z-[100] bg-dark-2 border-slate-900">
-                    <Button variant={'ghost'} className={`ghost_details-delete_btn border border-slate-950 justify-end flex items-center gap-3 w-fit hover:bg-light-3 hover:text-lime-50`}
-                        onClick={copyText}
-                    >
-                        {isCopied ? <img src="/assets/icons/checkmark.svg" alt="copy" width={16} height={16} /> : <img src="/assets/icons/copy.svg" alt="copy" width={16} height={16} />}
-                        <span>Cop{isCopied ? 'ied': 'y'}</span>
-                    </Button>
-                    {userId == comment?.user?.$id && <Button variant={'ghost'} className={`ghost_details-delete_btn border border-rose-800 justify-end flex items-center gap-3 w-fit hover:bg-rose-800 hover:text-lime-50`}
-                        onClick={handleDeletePost}
-                    >
-                        {isDeleting ? <Loader /> : <img src="/assets/icons/delete.svg" alt="delete" width={16} height={16} />}
-                        <span>Delet{isDeleting ? 'ing...': 'e'}</span>
-                    </Button>}
+                    <div className="py-6 flex flex-col gap-3">
+                        <Button variant={'ghost'} className={`ghost_details-delete_btn justify-end flex items-center gap-3 w-fit hover:text-lime-50`}
+                            onClick={copyText}
+                        >
+                            {isCopied ? <img src="/assets/icons/checkmark.svg" alt="copy" width={16} height={16} /> : <img src="/assets/icons/copy.svg" alt="copy" width={16} height={16} />}
+                            <span>Cop{isCopied ? 'ied': 'y'}</span>
+                        </Button>
+                        {userId == comment?.user?.$id && <Button variant={'ghost'} className={`ghost_details-delete_btn border border-rose-800 justify-end flex items-center gap-3 w-fit hover:bg-rose-800 hover:text-lime-50`}
+                            onClick={handleDeletePost}
+                        >
+                            {isDeleting ? <Loader /> : <img src="/assets/icons/delete.svg" alt="delete" width={16} height={16} />}
+                            <span>Delet{isDeleting ? 'ing...': 'e'}</span>
+                        </Button>}
                     </div>
-
                 </PopoverContent>
             </Popover>
         </div>

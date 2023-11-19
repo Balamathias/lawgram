@@ -82,14 +82,16 @@ function CommentForm({comment, postId, action}:{comment?: Models.Document, postI
             </FormItem>
           )}
         />
-        <Button type="submit" className="bg-primary-600 shad-button whitespace-nowrap rounded-[50px]">
-            {isPending ? (
-                <div className="flex gap-3 items-center">
-                    <Loader />
-                    <span>{action === 'Update' ? 'Updating...' : "Posting..."}</span>
-                </div>
-            ) : action === 'Update' ? "Update" : "Post"}
-        </Button>
+        <div className="flex justify-end">
+          <Button type="submit" className="bg-primary-600 shad-button whitespace-nowrap w-40 rounded-[50px]">
+              {isPending ? (
+                  <div className="flex gap-3 items-center">
+                      <Loader />
+                      <span>{action === 'Update' ? 'Updating...' : "Posting..."}</span>
+                  </div>
+              ) : action === 'Update' ? <span>Update</span> : <span>Post</span>}
+          </Button>
+        </div>
       </form>
     </Form>
   )
