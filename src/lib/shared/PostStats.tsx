@@ -1,11 +1,14 @@
 import { Models } from "appwrite"
-import { useDeleteSavedPost, useGetCurrentUser, useLikePost, useSavePost } from "../react-query/queriesAndMutations"
+import { useDeleteSavedPost, useGetCurrentUser, useGetPostComments, useLikePost, useSavePost } from "../react-query/queriesAndMutations"
 import React, { useEffect, useState } from "react"
 import { checkIsLiked } from "../utils"
 import Loader from "./Loader"
+import { useNavigate } from "react-router-dom"
 
 
 function PostStats({post, userId}: {post?: Models.Document, userId: string}) {
+
+    const navigate = useNavigate()
 
     const likeList = post?.likes.map((user: Models.Document) => user.$id)
 
@@ -17,6 +20,8 @@ function PostStats({post, userId}: {post?: Models.Document, userId: string}) {
     const {mutate: likePost} = useLikePost()
     const {mutate: savePost, isPending: isSaving} = useSavePost()
     const {mutate: deleteSavedPost, isPending: isDeleting} = useDeleteSavedPost()
+
+    const {data: comments} = useGetPostComments(post?.$id || '')
 
     const savedPostRecord = currentUser?.saves.find((record: Models.Document) => record.post.$id === post?.$id)
 
@@ -49,6 +54,11 @@ function PostStats({post, userId}: {post?: Models.Document, userId: string}) {
         }
     }
 
+    const handleComment = (e: React.MouseEvent) => {
+        e.stopPropagation()
+        post?.$id ?? navigate(`/posts/${post?.id}`)
+    }
+
   return (
     <div className="flex justify-between gap-3 items-center">
         <div className="flex flex-center gap-1">
@@ -62,6 +72,17 @@ function PostStats({post, userId}: {post?: Models.Document, userId: string}) {
                 className="cursor-pointer"
             />
             <p className="small-medium lg:base-medium ml-1 mr-1">{likes.length}</p>
+        </div>
+        <div className="flex flex-center gap-1">
+            <img
+                src={`/assets/icons/comment.svg`}
+                width={20}
+                height={20}
+                onClick={handleComment}
+                alt="comment"
+                className="cursor-pointer"
+            />
+            <p className="small-medium lg:base-medium ml-1 mr-1">{comments?.total ?? comments?.total}</p>
         </div>
         <div className="flex flex-center gap-1">
             {isDeleting || isSaving ? <Loader /> : <img

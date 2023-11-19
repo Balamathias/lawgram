@@ -18,7 +18,7 @@ function Topbar() {
     <section className="topbar">
         <div className="flex flex-between py-4 px-5">
             <Link to={'/'} className="flex gap-3 items-center">
-                <h2 className="font-bold text-xl text-orange-500">Lawgram</h2>
+                <h2 className="font-bold text-xl text-orange-500">LawGram</h2>
             </Link>
 
             <div className="flex gap-3 items-center">

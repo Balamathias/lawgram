@@ -29,7 +29,7 @@ function LeftSidebar() {
                     height={40}
                     alt="logo"
                 />
-                <span className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-violet-100">Lawgram.</span>
+                <span className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-violet-100">LawGram.</span>
             </Link>
             <Link to={`/profile/${user?.id}`} className="flex gap-3 items-center">
                 <img

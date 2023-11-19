@@ -559,3 +559,36 @@ export async function getPostComments(postId: string) {
       console.log(error);
     }
   }
+
+  export async function likeComment(commentId: string, likesArray: string[]) {
+    try {
+        const updatedComment = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.commentsCollectionId,
+            commentId,
+            {
+                likes: likesArray
+            }
+        )
+        if (!updatedComment) throw Error
+        return updatedComment
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function deleteComment(commentId: string, imageId?: string) {
+    if (!commentId && !imageId) throw Error
+    try {
+        const status = await databases.deleteDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.commentsCollectionId,
+            commentId
+        )
+        if (!status) throw Error
+        return {status: "ok", commentId}
+    } catch (error) {
+        console.log(error)
+    }
+}
+

@@ -3,10 +3,12 @@ import { Link } from "react-router-dom"
 import { multiFormatDateString } from "../utils"
 import { useUserAuth } from "@/context/AuthContext"
 import PostStats from "./PostStats"
+import ProcessedPost from "@/_root/ProcessedPost"
 
 function PostCard({post}: {post: Models.Document}) {
     const { user } = useUserAuth()
     if (!post.creator) return
+    
   return (
     <div className="post-card">
         <div className="flex-between">
@@ -42,10 +44,12 @@ function PostCard({post}: {post: Models.Document}) {
         </div>
         <Link to={`/posts/${post.$id}`}>
             <div className="small-medium lg:base-medium py-5">
-                <p className="base-medium tracking-normal text-light-2 leading-9">{post.caption}</p>
+                <div className="base-medium tracking-normal text-light-2 leading-9">
+                    <ProcessedPost content={post?.caption} />
+                </div>
                 <ul className="flex gap-1 mt-2">
                     {post.tags.map((tag: string) => <li>
-                        <Link to={`/posts/tags?tag=${tag}`} className="text-primary-600" key={tag}>#{tag}</Link>
+                        <Link to={`/posts/tags?tag=${tag}`} className="text-primary-600" key={tag + Math.random()}>#{tag}</Link>
                     </li>)}
                 </ul>
             </div>

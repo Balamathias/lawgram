@@ -5,7 +5,7 @@ import {
     useInfiniteQuery
 } from '@tanstack/react-query'
 
-import { SignInAccount, addPostComment, createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getInfiniteRecentPosts, getInfiniteUsers, getPostById, getPostComments, getRecentPosts, getSavedPosts, getUserById, getUserPosts, likePost, savePost, searchPosts, signOutAccount, updatePost, updateUser } from '../appwrite/api'
+import { SignInAccount, addPostComment, createPost, createUserAccount, deleteComment, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getInfiniteRecentPosts, getInfiniteUsers, getPostById, getPostComments, getRecentPosts, getSavedPosts, getUserById, getUserPosts, likeComment, likePost, savePost, searchPosts, signOutAccount, updatePost, updateUser } from '../appwrite/api'
 import { INewComment, INewPost, INewUser, IUpdatePost, IUpdateUser } from '@/types'
 import { QUERY_KEYS } from './queryKeys'
 
@@ -244,3 +244,27 @@ export const useGetPostComments = (postId: string) => {
     })
 }
 
+export const useLikeComment = () => {
+    const queryClient = useQueryClient()
+    
+    return useMutation({
+        mutationFn: ({commentId, likesArray}: {commentId: string, likesArray: string[]}) => likeComment(commentId, likesArray),
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.id]})
+            queryClient.invalidateQueries({queryKey: [QUERY_KEYS.GET_USER_BY_ID]})
+            queryClient.invalidateQueries({queryKey: [QUERY_KEYS.GET_CURRENT_USER]})
+            queryClient.invalidateQueries({queryKey: [QUERY_KEYS.GET_POST_COMMENTS]})
+        }
+    })
+}
+
+export const useDeleteComment = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: ({commentId, imageId}: {commentId: string, imageId?: string}) => deleteComment(commentId, imageId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: [QUERY_KEYS.GET_POST_COMMENTS]})
+        }
+    })
+}

@@ -18,6 +18,8 @@ import { useEffect } from "react"
 import { useInView } from "react-intersection-observer"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import CommentCard from "@/lib/shared/CommentCard"
+import ProcessedPost from "../ProcessedPost"
+import useCopyLink from "@/parsers/useCopyLink"
 
 function PostDetails() {
   const {data: posts, fetchNextPage, hasNextPage} = useGetPosts()
@@ -30,8 +32,9 @@ function PostDetails() {
   const {toast} = useToast()
   const navigate = useNavigate()
 
+  const {isCopied, copyLink} = useCopyLink()
+
   const {data: comments, isPending: isCommentsPending} = useGetPostComments(post?.$id || '')
-  console.log(comments)
 
   useEffect(()=>{
     if (inView) fetchNextPage()
@@ -80,6 +83,28 @@ function PostDetails() {
                   </div>
                 </Link>
                 <div className="flex-center gap-4">
+                  <div className={`flex-center`}>
+                      {isCopied ? (
+                        <img 
+                          src="/assets/icons/checkmark.svg"
+                          alt="edit"
+                          width={24}
+                          height={24}
+                          title="Copied."
+                          className="cursor-pointer"
+                        />
+                      ) : (
+                        <img
+                          src="/assets/icons/share.svg"
+                          alt="edit"
+                          width={24}
+                          height={24}
+                          title="Copy link to this post."
+                          className="cursor-pointer"
+                          onClick={copyLink}
+                      />
+                      )}
+                  </div>
                   <Link to={`/update-post/${post?.$id}`} className={`${user.id !== post?.creator.$id ? "hidden" : ""}`}>
                       <img
                           src="/assets/icons/edit.svg"
@@ -113,7 +138,9 @@ function PostDetails() {
               </div>
               <hr className="border border-dark-4/80 w-full" />
               <div className="small-medium lg:base-medium py-5 flex flex-1 flex-col gap-4 w-full">
-                <p className="base-medium">{post?.caption}</p>
+                <div className="base-medium">
+                  <ProcessedPost content={post?.caption} />
+                </div>
                 <ul className="flex gap-1 mt-2">
                     {post?.tags.map((tag: string) => <Link to={`/posts/tags?tag=${tag}`} className="text-primary-600" key={tag}>#{tag}</Link>)}
                 </ul>

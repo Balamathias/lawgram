@@ -3,6 +3,7 @@ import Loader from "@/lib/shared/Loader"
 import { Link, useParams } from "react-router-dom"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import GridPostList from "@/lib/shared/GridPostList"
+import ProcessedPost from "../ProcessedPost"
 
 function Profile() {
   const {id} = useParams()
@@ -41,7 +42,9 @@ function Profile() {
                   </p>
                 </Link>}
               </div>
-              <p className="text-light-2 base-medium mt-6 mb-4">{user?.bio}</p>
+              <div className="text-light-2 base-medium mt-6 mb-4">
+                <ProcessedPost content={user?.bio} />
+              </div>
             </div>
           </div>
         </div>

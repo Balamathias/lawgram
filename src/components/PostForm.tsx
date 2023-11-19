@@ -82,7 +82,7 @@ function PostForm({post, action}:{post?: Models.Document, action?: 'Create' | 'U
                 <FormItem>
                   <FormLabel className="shad-form_label">Caption</FormLabel>
                   <FormControl>
-                    <Textarea className="shad-textarea custom-scrollbar" placeholder="Say something about this post" {...field} />
+                    <Textarea className="shad-textarea custom-scrollbar" placeholder="What is the legal matter on your mind?" {...field} />
                   </FormControl>
                   <FormMessage className="shad-form_message" />
                 </FormItem>
