@@ -16,7 +16,10 @@ function Profile() {
   if (isPending) return <Loader/>
   
 
-  if (!user) return navigate('/not-found')
+  if (!user) {
+    navigate('/not-found')
+    return <></>
+  }
 
   return (
     <div className="flex flex-1">
