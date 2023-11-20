@@ -83,7 +83,7 @@ function CommentStats({comment, userId, isCopied, copyText}: ICommentStats) {
                     className="cursor-pointer"
                     />
                 </PopoverTrigger>
-                <PopoverContent className="absolute -top-40 right-0 px-6 rounded-lg shadow shadow-lg border-slate-700 border border-green-800">
+                <PopoverContent className="absolute -top-40 right-0 px-6 bg-black rounded-lg shadow shadow-lg border-slate-700 border border-green-800">
         
                     <div className="py-6 flex flex-col gap-3">
                         <Button variant={'ghost'} className={`ghost_details-delete_btn justify-end flex items-center gap-3 w-fit hover:text-lime-50`}
