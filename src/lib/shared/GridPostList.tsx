@@ -19,7 +19,7 @@ function GridPostList({posts, showUser=true, showStats=true}: IGridPostList) {
         {posts?.map(post => <li key={post?.$id} className="relative w-min-80 h-80">
             <Link to={`/posts/${post.$id}`} className="grid-post_link">
                 {post?.imageUrl ? (
-                <Image
+                <img
                     src={post?.imageUrl}
                     alt="explore-image"
                     className="w-full h-full object-cover"

@@ -78,13 +78,13 @@ function Profile() {
                     width={18}
                     height={18}
                   />
-                  <span>Posts</span>
-                  <Chip size="sm" variant="solid" color="primary">{posts?.total}</Chip>
+                  <span>Posts by {currentUser?.$id === user.$id ? "You" : user?.username}</span>
+                  <Chip size="sm" variant="solid" color="primary">{isNaN(Number(posts?.total)) ? 0 : posts?.total  }</Chip>
                 </div>
               }
             >
               <div className='flex w-full max-w-5xl flex-col gap-4 py-6'>
-                <h3 className="h3-bold md:h2-bold tracking-widest text-light-2"><span className="text-primary-600">{posts?.documents?.length}</span> post{posts?.documents?.length === 1 ? '': 's'}.</h3>
+                <h3 className="h3-bold md:h2-bold tracking-widest text-light-2"><span className="text-primary-600">{isNaN(Number(posts?.total)) ? 0 : posts?.total }</span> post{posts?.documents?.length === 1 ? '': 's'}.</h3>
                 {isGettingUserPosts ? <Loader /> : <GridPostList posts={posts?.documents} showUser={false}/>}
               </div>
             </Tab>
@@ -105,7 +105,7 @@ function Profile() {
             >
               <div className='flex w-full max-w-5xl flex-col gap-4 py-6'>
                 <h3 className="h3-bold md:h2-bold tracking-widest text-light-2"><span className="text-primary-600">{user?.liked?.length}</span> post{posts?.documents?.length === 1 ? '': 's'}.</h3>
-                {isGettingUserPosts ? <Loader /> : <GridPostList isLiked={true} posts={user?.liked} showUser={true} showStats={false}/>}
+                {isPending ? <Loader /> : <GridPostList isLiked={true} posts={user?.liked} showUser={true} showStats={false}/>}
               </div>
             </Tab>
           </Tabs>
