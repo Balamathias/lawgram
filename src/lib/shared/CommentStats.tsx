@@ -2,10 +2,15 @@ import { Models } from "appwrite"
 import { useDeleteComment, useLikeComment } from "../react-query/queriesAndMutations"
 import React, { useState } from "react"
 import { checkIsLiked } from "../utils"
-import { Popover, PopoverContent, PopoverTrigger } from "@radix-ui/react-popover"
-import { Button } from "@/components/ui/button"
+import { 
+    Popover, 
+    PopoverTrigger, 
+    PopoverContent, 
+    Button as NextUIButton,
+    Image, 
+} from '@nextui-org/react'
+
 import toast from "react-hot-toast"
-import Loader from "./Loader"
 import { useQueryClient } from "@tanstack/react-query"
 import { QUERY_KEYS } from "../react-query/queryKeys"
 
@@ -59,7 +64,7 @@ function CommentStats({comment, userId, isCopied, copyText}: ICommentStats) {
   return (
     <div className="flex justify-between gap-3 items-center relative" style={{zIndex: 290}}>
         <div className="flex flex-center gap-1">
-            <img
+            <Image
                 src={checkIsLiked(likes, userId) ? "/assets/icons/liked.svg" :
                     `/assets/icons/like.svg`}
                 width={20}
@@ -71,34 +76,42 @@ function CommentStats({comment, userId, isCopied, copyText}: ICommentStats) {
             <p className="small-medium lg:base-medium ml-1 mr-1">{likes.length}</p>
         </div>
         <div className="flex flex-center gap-1">
-            
-            <Popover modal={true}>
-                <PopoverTrigger className="ghost_details-delete_btn" asChild>
-                <img
-                    src={`/assets/icons/vert-ellipsis.svg`}
-                    width={20}
-                    height={20}
-                    onClick={()=>{}}
-                    alt="save"
-                    className="cursor-pointer"
-                    />
+            <Popover placement="bottom" showArrow offset={10}>
+                <PopoverTrigger>
+                    <NextUIButton 
+                        color="default"
+                        isIconOnly
+                        variant="faded"
+                        className="bg-dark-3 border-none rounded-full"
+                    >
+                        <Image
+                            src={`/assets/icons/vert-ellipsis.svg`}
+                            width={20}
+                            height={20}
+                            onClick={()=>{}}
+                            alt="save"
+                            className="cursor-pointer"
+                            />
+                    </NextUIButton>
                 </PopoverTrigger>
-                <PopoverContent className="absolute -top-40 right-0 px-6 bg-black rounded-lg shadow shadow-lg border-slate-700 border border-green-800">
-        
-                    <div className="py-6 flex flex-col gap-3">
-                        <Button variant={'ghost'} className={`ghost_details-delete_btn justify-end flex items-center gap-3 w-fit hover:text-lime-50`}
-                            onClick={copyText}
-                        >
-                            {isCopied ? <img src="/assets/icons/checkmark.svg" alt="copy" width={16} height={16} /> : <img src="/assets/icons/copy.svg" alt="copy" width={16} height={16} />}
-                            <span>Cop{isCopied ? 'ied': 'y'}</span>
-                        </Button>
-                        {userId == comment?.user?.$id && <Button variant={'ghost'} className={`ghost_details-delete_btn border border-rose-800 justify-end flex items-center gap-3 w-fit hover:bg-rose-800 hover:text-lime-50`}
-                            onClick={handleDeletePost}
-                        >
-                            {isDeleting ? <Loader /> : <img src="/assets/icons/delete.svg" alt="delete" width={16} height={16} />}
-                            <span>Delet{isDeleting ? 'ing...': 'e'}</span>
-                        </Button>}
-                    </div>
+                <PopoverContent className="w-[196px] bg-dark-3">
+                    {() => (
+                        <div className="py-6 flex flex-col gap-3">
+                            <NextUIButton variant={'ghost'} className={`hover:text-lime-50`}
+                                onClick={copyText}
+                                color="primary"
+                            >
+                                {isCopied ? <Image src="/assets/icons/checkmark.svg" alt="copy" width={16} height={16} /> : <Image src="/assets/icons/copy.svg" alt="copy" width={16} height={16} />}
+                                <span>Cop{isCopied ? 'ied': 'y'}</span>
+                            </NextUIButton>
+                            {userId == comment?.user?.$id && <NextUIButton isLoading={isDeleting} variant={'ghost'} color="danger" className={`hover:text-lime-50`}
+                                onClick={handleDeletePost}
+                            >
+                                {!isDeleting && <Image src="/assets/icons/delete.svg" alt="delete" width={16} height={16} />}
+                                <span>Delet{isDeleting ? 'ing...': 'e'}</span>
+                            </NextUIButton>}
+                        </div>
+                    )}
                 </PopoverContent>
             </Popover>
         </div>

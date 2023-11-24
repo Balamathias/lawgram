@@ -2,6 +2,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
+import { Button as NextUIButton } from '@nextui-org/react'
+
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -19,7 +21,6 @@ import { PostValidation } from "@/lib/validations"
 import { useUserAuth } from "@/context/AuthContext"
 import { useCreatePost, useUpdatePost } from "@/lib/react-query/queriesAndMutations"
 import { useNavigate } from "react-router-dom"
-import Loader from "@/lib/shared/Loader"
 import toast from "react-hot-toast"
 
 
@@ -80,7 +81,7 @@ function PostForm({post, action}:{post?: Models.Document, action?: 'Create' | 'U
                 <FormItem>
                   <FormLabel className="shad-form_label">Caption</FormLabel>
                   <FormControl>
-                    <Textarea className="shad-textarea custom-scrollbar" placeholder="What is the legal matter on your mind?" {...field} />
+                    <Textarea spellCheck={true} className="shad-textarea custom-scrollbar" placeholder="What is the legal matter on your mind?" {...field} />
                   </FormControl>
                   <FormMessage className="shad-form_message" />
                 </FormItem>
@@ -127,14 +128,11 @@ function PostForm({post, action}:{post?: Models.Document, action?: 'Create' | 'U
             />
             <div className="flex items-center justify-end gap-4">
                 <Button type="button" className="shad-button_dark_4">Cancel</Button>
-                <Button type="submit" className="bg-primary-600 shad-button whitespace-nowrap">
+                <NextUIButton isLoading={isPending || isPendingUpdate} type="submit" className="bg-primary-600 shad-button whitespace-nowrap">
                     {isPending || isPendingUpdate ? (
-                        <div className="flex gap-3 items-center">
-                            <Loader />
-                            <span>{action === 'Update' ? 'Updating...' : "Posting..."}</span>
-                        </div>
+                      <span>{action === 'Update' ? 'Updating...' : "Posting..."}</span>
                     ) : action === 'Update' ? "Update" : "Post"}
-                </Button>
+                </NextUIButton>
             </div>
           </form>
         </Form>

@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button'
+import { Image } from '@nextui-org/react'
 import {useCallback, useState} from 'react'
 import {FileWithPath, useDropzone} from 'react-dropzone'
 
@@ -34,10 +35,10 @@ function FileUploader({ fieldChange, mediaUrl, isProfile }: propTypes) {
           (
             <>
                 <div className={isProfile ? 'flex gap-3 max-xs:flex-col items-center' :`flex flex-1 w-full items-center p-5 lg:p-10`}>
-                  <img
+                  <Image
                       src={fileUrl}
                       alt='file'
-                      className={isProfile ? 'w-40 h-40 rounded-full object-cover' : 'file_uploader-img'}
+                      className={isProfile ? 'w-40 h-40 rounded-full object-cover' : 'file_uploader-Image'}
                   />
                   {isProfile && <p className="text-primary-600 cursor-pointer base-medium">Select a file to upload</p>}
                 </div>
@@ -45,13 +46,13 @@ function FileUploader({ fieldChange, mediaUrl, isProfile }: propTypes) {
             </>
           ): (
               isProfile ? ( 
-                <img
+                <Image
                     src={'/assets/icons/profile-placeholder.svg'}
                     alt='file'
                     className={'w-40 h-40 object-cover'}
                 />) :
               <div className='file_uploader-box'>
-                  {!isProfile && <><img
+                  {!isProfile && <><Image
                       src='/assets/icons/file-upload.svg'
                       alt='file-upload'
                       width={96}

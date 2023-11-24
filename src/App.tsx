@@ -52,7 +52,7 @@ const App = () => {
           error: {
             className: "p-4 rounded-lg border border-rose-800 bg-dark-1 shadow-md text-rose-700",
             style: {
-              color: "darkred",
+              color: "lightpink",
               padding: "7px",
               borderRadius: "4px",
               backgroundColor: "#111",

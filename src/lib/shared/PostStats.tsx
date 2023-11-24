@@ -4,13 +4,14 @@ import React, { useEffect, useState } from "react"
 import { checkIsLiked } from "../utils"
 import Loader from "./Loader"
 import { useNavigate } from "react-router-dom"
+import { Image } from "@nextui-org/react"
 
 
-function PostStats({post, userId}: {post?: Models.Document, userId: string}) {
+function PostStats({post, userId}: {post?: Models.Document, userId: string, isLiked?: boolean}) {
 
     const navigate = useNavigate()
 
-    const likeList = post?.likes.map((user: Models.Document) => user.$id)
+    const likeList = post?.likes?.map((user: Models.Document) => user.$id)
 
     const [likes, setLikes] = useState(likeList)
     const [isSaved, setIsSavedPost] = useState(false)
@@ -62,7 +63,7 @@ function PostStats({post, userId}: {post?: Models.Document, userId: string}) {
   return (
     <div className="flex justify-between gap-3 items-center">
         <div className="flex flex-center gap-1">
-            <img
+            <Image
                 src={checkIsLiked(likes, userId) ? "/assets/icons/liked.svg" :
                     `/assets/icons/like.svg`}
                 width={20}
@@ -74,7 +75,7 @@ function PostStats({post, userId}: {post?: Models.Document, userId: string}) {
             <p className="small-medium lg:base-medium ml-1 mr-1">{likes?.length}</p>
         </div>
         <div className="flex flex-center gap-1">
-            <img
+            <Image
                 src={`/assets/icons/comment.svg`}
                 width={20}
                 height={20}
@@ -85,7 +86,7 @@ function PostStats({post, userId}: {post?: Models.Document, userId: string}) {
             <p className="small-medium lg:base-medium ml-1 mr-1">{comments?.total ?? comments?.total}</p>
         </div>
         <div className="flex flex-center gap-1">
-            {isDeleting || isSaving ? <Loader /> : <img
+            {isDeleting || isSaving ? <Loader /> : <Image
                 src={isSaved ? `/assets/icons/saved.svg` : `/assets/icons/save.svg`}
                 width={20}
                 height={20}

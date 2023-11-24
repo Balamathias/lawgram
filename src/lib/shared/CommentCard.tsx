@@ -6,6 +6,7 @@ import ProcessedPost from "@/_root/ProcessedPost"
 import CommentStats from "./CommentStats"
 import { useUserAuth } from "@/context/AuthContext"
 import useCopyText from "@/parsers/useCopyText"
+import { Image } from "@nextui-org/react"
 
 function CommentCard({comment}: {comment: Models.Document}) {
 
@@ -18,7 +19,7 @@ function CommentCard({comment}: {comment: Models.Document}) {
         <div className=" flex flex-col gap-2 w-full">
             <div className="flex items-center gap-2">
                 <Link to={`/profile/${comment?.user?.$id}`}>
-                    <img 
+                    <Image 
                     src={comment?.user?.profileImage || '/assets/icons/profile-placeholder.svg'}
                     alt="profile_image"
                     className="w-12 lg:h-12 object-cover rounded-full" 
@@ -27,7 +28,7 @@ function CommentCard({comment}: {comment: Models.Document}) {
                 <div className="flex flex-col gap-2">
                     <p className="base-medium flex items-center gap-2 text-light-2 lg:body-bold">
                         <span>@{comment?.user?.username}</span> {comment?.user?.email === 'balamathias40@gmail.com' && 
-                        <img
+                        <Image
                         src="/assets/icons/twitter-verified-badge.svg"
                         alt="badge"
                         width={20}
@@ -44,7 +45,7 @@ function CommentCard({comment}: {comment: Models.Document}) {
                     <ProcessedPost content={comment?.comment} />
                 </div>
             </div>
-            {comment?.imageUrl && <img 
+            {comment?.imageUrl && <Image 
                 src={comment.imageUrl || '/assets/icons/profile-placeholder.svg'} 
                 alt="comment-mage" 
                 className="comment-card_img" 

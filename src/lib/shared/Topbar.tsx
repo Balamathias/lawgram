@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Link, useNavigate } from "react-router-dom"
 import { useGetCurrentUser, useSignOut } from "../react-query/queriesAndMutations"
 import { useEffect } from "react"
+import { Image } from "@nextui-org/react"
 
 function Topbar() {
     const { mutate: signOut, isSuccess } = useSignOut()
@@ -23,10 +24,10 @@ function Topbar() {
 
             <div className="flex gap-3 items-center">
                 <Button onClick={() => signOut()} variant="ghost" className="shad-button_ghost">
-                    <img src="/assets/icons/logout.svg" alt="logout"/> 
+                    <Image src="/assets/icons/logout.svg" alt="logout"/> 
                 </Button>
                 <Link to={`/profile/${user?.$id}`} className="flex-center">
-                    <img
+                    <Image
                         src={user?.profileImage || '/assets/icons/profile-placeholder.svg'}
                         width={40}
                         height={40}

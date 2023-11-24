@@ -5,9 +5,11 @@ import {
     useInfiniteQuery
 } from '@tanstack/react-query'
 
-import { SignInAccount, addPostComment, createPost, createUserAccount, deleteComment, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getInfiniteRecentPosts, getInfiniteUsers, getPostById, getPostComments, getRecentPosts, getSavedPosts, getUserById, getUserPosts, likeComment, likePost, savePost, searchPosts, signOutAccount, updatePost, updateUser } from '../appwrite/api'
+import { SignInAccount, SignInOAuthAccount, SignUpOAuthAccount, addPostComment, createPost, createUserAccount, deleteComment, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getInfiniteRecentPosts, getInfiniteUsers, getPostById, getPostComments, getRecentPosts, getSavedPosts, getUserById, getUserPosts, likeComment, likePost, savePost, searchPosts, signOutAccount, updatePost, updateUser } from '../appwrite/api'
 import { INewComment, INewPost, INewUser, IUpdatePost, IUpdateUser } from '@/types'
 import { QUERY_KEYS } from './queryKeys'
+import { useEffect } from 'react'
+import { account } from '../appwrite/config'
 
 export const useCreateNewUser = () => {
     return useMutation({
@@ -20,6 +22,35 @@ export const useSignIn = () => {
     return useMutation({
         mutationFn: ({email, password}: {email: string, password: string}) => SignInAccount({email, password}),
     })
+}
+
+export const useOAuthSignIn = () => {
+    return useMutation({
+        mutationFn: SignInOAuthAccount,
+    })
+}
+
+export const useOAuthSignUp = () => {
+    return useMutation({
+        mutationFn: SignUpOAuthAccount,
+        mutationKey: ['user']
+    })
+}
+
+export const useOnOAuthSuccess = () => {
+    useEffect(()=>{
+
+        async () => {
+            const session = await account.get()
+            const user = await onOAuthSignUpSuccess({
+                $id: session.$id,
+                name: session.name,
+                email: session.email
+            })
+            return user
+        }
+
+    }, [])
 }
 
 export const useSignOut = () => {

@@ -5,6 +5,7 @@ import { useEffect } from "react"
 import { useUserAuth } from "@/context/AuthContext"
 import { sidebarLinks } from "@/constants"
 import { INavLink } from "@/types"
+import { Image } from "@nextui-org/react"
 
 function LeftSidebar() {
     const { mutate: signOut, isSuccess } = useSignOut()
@@ -22,7 +23,7 @@ function LeftSidebar() {
     <nav className="leftsidebar">
         <div className="flex flex-col gap-11">
             <Link to={'/'} className="flex items-center gap-x-2">
-                <img
+                <Image
                     src="/assets/images/mainlogo.png"
                     className="object-cover rounded-full"
                     width={40}
@@ -32,7 +33,7 @@ function LeftSidebar() {
                 <span className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-violet-100">LawGram.</span>
             </Link>
             <Link to={`/profile/${user?.id}`} className="flex gap-3 items-center">
-                <img
+                <Image
                     src={user.profileImage || '/assets/icons/profile-placeholder.svg'}
                     width={40}
                     height={40}
@@ -49,7 +50,7 @@ function LeftSidebar() {
                     const isActive = pathname === link.route
                     return <li className={`leftsidebar-link group ${isActive && 'text-primary-600'}`} key={link.label}>
                         <NavLink to={link.route} className="flex gap-4 p-4">
-                            <img
+                            <Image
                                 src={link.imgURL}
                                 alt="link.label"
                                 className={`group-hover:invert-white ${isActive && 'invert-white'}`}
@@ -61,7 +62,7 @@ function LeftSidebar() {
             </ul>
         </div>
         <Button onClick={() => signOut()} variant="ghost" className="shad-button_ghost flex items-center gap-4 p-4">
-            <img src="/assets/icons/logout.svg"/>
+            <Image src="/assets/icons/logout.svg"/>
             <span className="small-regular text-light-2">Logout</span> 
         </Button>
     </nav>

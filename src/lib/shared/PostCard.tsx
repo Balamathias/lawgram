@@ -4,6 +4,7 @@ import { multiFormatDateString } from "../utils"
 import { useUserAuth } from "@/context/AuthContext"
 import PostStats from "./PostStats"
 import ProcessedPost from "@/_root/ProcessedPost"
+import { Image } from "@nextui-org/react"
 
 function PostCard({post}: {post: Models.Document}) {
     const { user } = useUserAuth()
@@ -14,14 +15,14 @@ function PostCard({post}: {post: Models.Document}) {
         <div className="flex-between">
             <div className="flex items-center gap-3">
                 <Link to={`/profile/${post?.creator?.$id}`}>
-                    <img 
+                    <Image 
                     src={post?.creator?.profileImage || '/assets/icons/profile-placeholder.svg'}
                     alt="profile_image"
                     className="w-12 lg:h-12 object-cover rounded-full" 
                     />
                 </Link>
                 <div className="flex flex-col gap-3">
-                    <p className="base-medium flex items-center gap-2 text-light-2 lg:body-bold"><span>@{post?.creator?.username}</span> {post?.creator?.email === 'balamathias40@gmail.com' && <img
+                    <p className="base-medium flex items-center gap-2 text-light-2 lg:body-bold"><span>@{post?.creator?.username}</span> {post?.creator?.email === 'balamathias40@gmail.com' && <Image
                         src="/assets/icons/twitter-verified-badge.svg"
                         alt="badge"
                         width={20}
@@ -35,7 +36,7 @@ function PostCard({post}: {post: Models.Document}) {
                 </div>
             </div>
             <Link to={`/update-post/${post?.$id}`} className={`${user.id !== post.creator.$id && "hidden"}`}>
-                <img
+                <Image
                     src="/assets/icons/edit.svg"
                     alt="edit"
                     width={16}
@@ -57,8 +58,10 @@ function PostCard({post}: {post: Models.Document}) {
         </Link>
         {post?.imageUrl && <img 
             src={post.imageUrl || '/assets/icons/profile-placeholder.svg'} 
-            alt="post-mage" 
-            className="post-card_img" 
+            alt="post-image"
+            sizes="1024×1024" 
+            className="post-card_img"
+             
         />}
         <PostStats post={post} userId={user.id} />
     </div>

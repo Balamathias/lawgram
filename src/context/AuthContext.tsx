@@ -27,7 +27,7 @@ const authContext = createContext<IcontextType>(INITIAL_STATE)
 
 function AuthProvider({children}: { children: React.ReactNode}) {
     const [user, setUser] = useState<IUser>(USER_INITIALS)
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(true)
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
 
     const navigate = useNavigate()
@@ -58,9 +58,9 @@ function AuthProvider({children}: { children: React.ReactNode}) {
 
     useEffect(() => {
         if (localStorage.getItem('cookieFallback') === '[]') {
-            navigate('/sign-in')
+            return navigate('/sign-in')
         } 
-        else if (localStorage.getItem('cookieFallback') === null) navigate('/sign-up')
+        else if (localStorage.getItem('cookieFallback') === null) return navigate('/sign-up')
         else checkUser()
     }, [])
     
@@ -78,6 +78,6 @@ function AuthProvider({children}: { children: React.ReactNode}) {
   )
 }
 
-export default AuthProvider
-
 export const useUserAuth = () => useContext(authContext)
+
+export default AuthProvider

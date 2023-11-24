@@ -1,4 +1,4 @@
-import { useGetInfinitePosts} from "@/lib/react-query/queriesAndMutations"
+import { useGetInfinitePosts } from "@/lib/react-query/queriesAndMutations"
 import Error from "@/lib/shared/Error"
 import Loader from "@/lib/shared/Loader"
 import PostCard from "@/lib/shared/PostCard"

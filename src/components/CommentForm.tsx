@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
-import { Button } from "@/components/ui/button"
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, useDisclosure } from "@nextui-org/react"
 import {
   Form,
   FormControl,
@@ -16,7 +16,6 @@ import { Models } from "appwrite"
 import { CommentValidation } from "@/lib/validations"
 import { useUserAuth } from "@/context/AuthContext"
 import { useCreateComment } from "@/lib/react-query/queriesAndMutations"
-import Loader from "@/lib/shared/Loader"
 import toast from "react-hot-toast"
 
 
@@ -24,7 +23,7 @@ function CommentForm({comment, postId, action}:{comment?: Models.Document, postI
 
     const { user } = useUserAuth()
     const {mutateAsync: createComment, isPending} = useCreateComment()
-    // const {mutateAsync: updatePost, isPending: isPendingUpdate} = useUpdatePost()
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
     const form = useForm<z.infer<typeof CommentValidation>>({
         resolver: zodResolver(CommentValidation),
@@ -35,20 +34,6 @@ function CommentForm({comment, postId, action}:{comment?: Models.Document, postI
     })
     
     async function onSubmit(values: z.infer<typeof CommentValidation>) {
-
-        // if (post && action === 'Update') {
-        //   const updatedPost = await updatePost({
-        //     ...values,
-        //     imageUrl: post.imageUrl,
-        //     postId: post.$id,
-        //     imageId: post?.imageId,
-        // })
-
-        // if (!updatedPost) return toast({description: "Post could not be updated, please try again."})
-
-        // return navigate(`/posts/${post.$id}`)
-
-        // }
 
         const newComment = await createComment({
             ...values,
@@ -63,37 +48,62 @@ function CommentForm({comment, postId, action}:{comment?: Models.Document, postI
         if (newComment) {
             form.reset()
             toast.success("Comment Posted successfully.")
+            onOpenChange()
         }
     }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col max-w-5xl w-full gap-4">
-        <FormField
-          control={form.control}
-          name="comment"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="hidden">Add comment</FormLabel>
-              <FormControl>
-                <Textarea className="shad-comment-textarea custom-scrollbar" placeholder="Say something about this post" {...field} />
-              </FormControl>
-              <FormMessage className="shad-form_message" />
-            </FormItem>
+    <>
+    <Button onPress={onOpen} color="primary" variant="bordered">
+      Post a Comment
+    </Button>
+    <Modal 
+        isOpen={isOpen} 
+        onOpenChange={onOpenChange}
+        placement="center"
+        backdrop="opaque"
+      >
+        <ModalContent className="bg-dark-2 p-4 shadow-2xl border border-dark-4">
+          {(onClose) => (
+            <>
+            <ModalBody>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col py-2 max-w-5xl w-full gap-4">
+                <FormField
+                  control={form.control}
+                  name="comment"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="hidden">Add comment</FormLabel>
+                      <FormControl>
+                        <Textarea className="shad-comment-textarea bg-[#222] custom-scrollbar" placeholder="Say something about this post" {...field} />
+                      </FormControl>
+                      <FormMessage className="shad-form_message" />
+                    </FormItem>
+                  )}
+                />
+                <div className="flex justify-end">
+                </div>
+                <ModalFooter>
+                  <Button color="danger" variant="flat" onPress={onClose} className="rounded-[50px]">
+                    Close
+                  </Button>
+                  <Button type="submit"
+                    isLoading={isPending} 
+                    className="bg-primary-600 text-slate-50 whitespace-nowrap rounded-[50px]">
+                      {isPending ? (
+                          <span>{action === 'Update' ? 'Updating...' : "Posting..."}</span>
+                      ) : action === 'Update' ? <span>Update</span> : <span>Post</span>}
+                  </Button>
+                </ModalFooter>
+              </form>
+            </Form>
+            </ModalBody>
+            </>
           )}
-        />
-        <div className="flex justify-end">
-          <Button type="submit" className="bg-primary-600 shad-button whitespace-nowrap w-40 rounded-[50px]">
-              {isPending ? (
-                  <div className="flex gap-3 items-center">
-                      <Loader />
-                      <span>{action === 'Update' ? 'Updating...' : "Posting..."}</span>
-                  </div>
-              ) : action === 'Update' ? <span>Update</span> : <span>Post</span>}
-          </Button>
-        </div>
-      </form>
-    </Form>
+        </ModalContent>
+    </Modal>
+    </>
   )
 }
 

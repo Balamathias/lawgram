@@ -1,9 +1,9 @@
 import { useGetCurrentUser, useGetUser, useGetUserPosts } from "@/lib/react-query/queriesAndMutations"
 import Loader from "@/lib/shared/Loader"
 import { Link, useNavigate, useParams } from "react-router-dom"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import GridPostList from "@/lib/shared/GridPostList"
 import ProcessedPost from "../ProcessedPost"
+import { Chip, Tab, Tabs } from "@nextui-org/react"
 
 function Profile() {
   const {id} = useParams()
@@ -56,26 +56,60 @@ function Profile() {
             </div>
           </div>
         </div>
-        <Tabs defaultValue="pictures" className="w-full max-w-5xl flex-1">
-          <TabsList className="flex gap-2 w-full justify-start">
-            <TabsTrigger value="pictures" className="rounded-lg py-4 px-6 bg-dark-4 shadow">
-              <img
-                src="/assets/icons/wallpaper.svg"
-                alt="pictures"
-                width={18}
-                height={18}
-              />
-              <p className="small-medium ml-2 text-light-3">
-                Picture
-              </p>
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="pictures" className='flex w-full max-w-5xl flex-col gap-4 py-6'>
-            <h3 className="h3-bold md:h2-bold tracking-widest text-light-2"><span className="text-primary-600">{posts?.documents?.length}</span> post{posts?.documents?.length === 1 ? '': 's'}.</h3>
-            {isGettingUserPosts ? <Loader /> : <GridPostList posts={posts?.documents} showUser={false}/>}
-          </TabsContent>
-        </Tabs>
+        <div className="flex w-full flex-col">
+          <Tabs 
+            aria-label="Options" 
+            color="primary" 
+            variant="underlined"
+            classNames={{
+              tabList: "gap-12 w-full relative flex rounded-none p-0 border-b border-divider",
+              cursor: "w-full bg-primary",
+              tab: "max-w-fit px-0 h-12",
+              tabContent: "group-data-[selected=true]:text-primary"
+            }}
+          >
+            <Tab
+              key="posts"
+              title={
+                <div className="flex items-center space-x-2">
+                  <img
+                    src="/assets/icons/wallpaper.svg"
+                    alt="pictures"
+                    width={18}
+                    height={18}
+                  />
+                  <span>Posts</span>
+                  <Chip size="sm" variant="solid" color="primary">{posts?.total}</Chip>
+                </div>
+              }
+            >
+              <div className='flex w-full max-w-5xl flex-col gap-4 py-6'>
+                <h3 className="h3-bold md:h2-bold tracking-widest text-light-2"><span className="text-primary-600">{posts?.documents?.length}</span> post{posts?.documents?.length === 1 ? '': 's'}.</h3>
+                {isGettingUserPosts ? <Loader /> : <GridPostList posts={posts?.documents} showUser={false}/>}
+              </div>
+            </Tab>
+            <Tab
+              key="liked"
+              title={
+                <div className="flex items-center space-x-2">
+                  <img
+                    src="/assets/icons/liked.svg"
+                    alt="pictures"
+                    width={18}
+                    height={18}
+                  />
+                  <span>Liked Posts</span>
+                  <Chip size="sm" variant="solid" color="secondary">{user?.liked?.length}</Chip>
+                </div>
+              }
+            >
+              <div className='flex w-full max-w-5xl flex-col gap-4 py-6'>
+                <h3 className="h3-bold md:h2-bold tracking-widest text-light-2"><span className="text-primary-600">{user?.liked?.length}</span> post{posts?.documents?.length === 1 ? '': 's'}.</h3>
+                {isGettingUserPosts ? <Loader /> : <GridPostList isLiked={true} posts={user?.liked} showUser={true} showStats={false}/>}
+              </div>
+            </Tab>
+          </Tabs>
+        </div>  
       </div>
     </div>
   )

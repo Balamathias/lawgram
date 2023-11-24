@@ -1,4 +1,5 @@
 import { bottombarLinks } from "@/constants"
+import { Image } from "@nextui-org/react"
 import { Link, useLocation } from "react-router-dom"
 
 function Bottombar() {
@@ -9,7 +10,7 @@ function Bottombar() {
           const isActive = pathname === link.route
           return (
               <Link key={link.label} to={link.route} className={`flex flex-center max-xs:flex-col gap-1 p-4 transition ${isActive && 'text-primary-600'}`}>
-                  <img
+                  <Image
                       src={link.imgURL}
                       alt="link.label"
                       width={16}

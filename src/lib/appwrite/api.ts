@@ -58,6 +58,60 @@ export async function SignInAccount(user: { email: string, password: string}) {
     }
 }
 
+export async function SignUpOAuthAccount() {
+    try{        
+        const session = await account.get();
+        
+        const name = session?.name
+        const email = session?.email
+        const userId = session?.$id
+        
+        account.createOAuth2Session('google', 'http://localhost:5173', 'http://localhost:5173/sign-up');
+        
+        await new Promise((resolve: any) => {
+            setTimeout(() => {
+                saveOAuthUser({$id: userId, name, email})
+                resolve();
+            }, 3000)
+        })
+
+        if (!session) 
+            throw new Error('User could not be created');
+    } catch(error) {
+        console.log(error)
+    }
+}
+
+export async function saveOAuthUser(newAccount: {
+    $id: string,
+    name: string,
+    email: string
+}) {
+
+    const userExists = await getUserById(newAccount.$id)
+
+    if (userExists?.$id) throw new Error("User already exists in database.")
+    
+    const avatar = avatars.getInitials(newAccount.name)
+    const newUser = await saveUserToDB({
+        accountId: newAccount.$id,
+        name: newAccount.name,
+        email: newAccount.email,
+        username: '',
+        profileImage: avatar,
+    })
+    return newUser
+}
+
+export async function SignInOAuthAccount() {
+    try{
+        const session = account.createOAuth2Session('google', 'http://localhost:5173', 'http://localhost:5173/sign-in')
+        return session
+    } catch(error) {
+        console.log(error)
+    }
+}
+
 export async function getCurrentUser() {
     try {
         const currentUser = await account.get()
@@ -70,7 +124,7 @@ export async function getCurrentUser() {
             [Query.equal('accountId', currentUser.$id)]
         )
 
-        if (!currentAccount) throw new Error
+        if (!currentAccount ) throw Error
 
         const user = (await currentAccount).documents.at(0)
 
@@ -223,6 +277,22 @@ export async function likePost(postId: string, likesArray: string[]) {
         )
         if (!updatedPost) throw Error
         return updatedPost
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+/** Redundant */
+export async function getUserLikedPosts(userId: string) {
+    try {
+        const posts = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            [Query.equal('user', userId)]
+        )
+        if (!posts) throw Error
+
+        return posts
     } catch (error) {
         console.log(error)
     }

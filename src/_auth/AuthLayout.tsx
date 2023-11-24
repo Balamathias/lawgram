@@ -7,18 +7,23 @@ function AuthLayout() {
 
   return (
     <>
-      {isAuthenticated ? <Navigate to="/" /> : <>
+      {isAuthenticated ? <Navigate to="/" /> : 
       
-        <section className="flex flex-1 justify-center flex-col h-screen items-center py-auto common-container">
+      <section className='flex gap-8 w-screen h-screen'
+        style={{
+          backgroundImage: 'url("/assets/images/mainlogo.png")',
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center"
+        }}
+      >
+      
+        <section className="flex flex-1 bg-dark-4 opacity-90 backdrop-blur-lg justify-center flex-col h-screen items-center py-auto common-container">
           <Outlet />
         </section>
 
-        <img
-          src="/assets/images/mainlogo.png"
-          className="h-full w-1/2 bg-no-repeat bg-transparent object-cover hidden xl:block"
-          alt="Side Image"
-        />
-      </>}
+      </section>   
+    }
     </>
   )
 }

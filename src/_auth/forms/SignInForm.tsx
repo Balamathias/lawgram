@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
-import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -16,13 +15,14 @@ import { Input } from "@/components/ui/input"
 import { SignInValidation } from "@/lib/validations"
 import { Link, useNavigate } from "react-router-dom"
 
-import { useSignIn } from "@/lib/react-query/queriesAndMutations"
-import Loader from "@/lib/shared/Loader"
+import { useOAuthSignIn, useSignIn } from "@/lib/react-query/queriesAndMutations"
 import { useUserAuth } from "@/context/AuthContext"
 import toast from "react-hot-toast"
+import { Button as NextUIButton, Divider, Image } from "@nextui-org/react"
 
 function SignInForm() {
   const { mutateAsync: getUserSession, isPending } = useSignIn()
+  const { mutateAsync: getUserOAuthSession, isPending: isGetting } = useOAuthSignIn()
   const { checkUser } = useUserAuth()
   const navigate = useNavigate()
 
@@ -33,6 +33,11 @@ function SignInForm() {
       password: ""
     },
   })
+
+  async function handleOAuthSignIn() {
+    const session = await getUserOAuthSession()
+    console.log(session)
+  }
  
   async function onSubmit(values: z.infer<typeof SignInValidation>) {
     const session = await getUserSession({email: values.email, password: values.password})
@@ -50,10 +55,10 @@ function SignInForm() {
   return (
     <Form {...form}>
 
-      <div className="sm:w-420 gap-y-1 p-3 space-y-5">
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 w-full flex flex-col gap-5">
+      <div className="sm:w-420 gap-y-1 mt-6 md:mt-12 mb-4 p-4 md:p-8 space-y-5 opacity-100 bg-dark-1 rounded-lg shadow-xl">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 w-full flex flex-col gap-2">
           <div className="flex items-center gap-x-2">
-            <img
+            <Image
               src="/assets/images/mainlogo.png"
               className="object-cover rounded-full"
               width={40}
@@ -90,14 +95,25 @@ function SignInForm() {
               </FormItem>
             )}
           />
-        <Button type="submit" className="bg-orange-600 hover:bg-orange-700">{
-          isPending ? <div className="flex gap-2 items-center">
-            <Loader />
-            <span className="mx-2 text-sm">Loading...</span>
-          </div> : 'Sign In'
-        }</Button>
+        <NextUIButton isLoading={isPending} type="submit" className="bg-orange-600 text-light-2 hover:bg-orange-700">{
+          isPending ?
+            <span className="mx-2 text-sm">Loading...</span>: 'Sign In'
+        }</NextUIButton>
         <p className="text-light-2 text-sm pt-2">Don't have an account yet? <Link to={'/sign-up'} className="text-orange-400">Create an account.</Link></p>
       </form>
+      <Divider className="bg-light-4 my-4" />
+      <NextUIButton
+        onClick={handleOAuthSignIn}
+        isLoading={isGetting} 
+        className="flex w-full gap-2 items-center flex-row bg-dark-3 text-light-2 cursor-pointer">
+        <Image 
+          src={'/assets/images/google.png'}
+          width={24}
+          height={24}
+          className="rounded-full"
+        />
+        <span>Continue with google</span>
+      </NextUIButton>
       </div>
     </Form>
   )
