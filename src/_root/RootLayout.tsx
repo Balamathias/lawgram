@@ -10,7 +10,7 @@ function RootLayout() {
       <Topbar />
       <LeftSidebar />
 
-      <section className="flex flex-1 h-full">
+      <section className="flex bg-dark-1 min-h-screen flex-1 h-full">
         <Outlet />
       </section>
 
