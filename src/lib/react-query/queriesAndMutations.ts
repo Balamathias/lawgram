@@ -8,8 +8,6 @@ import {
 import { SignInAccount, SignInOAuthAccount, SignUpOAuthAccount, addPostComment, createPost, createUserAccount, deleteComment, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getInfiniteRecentPosts, getInfiniteUsers, getPostById, getPostComments, getRecentPosts, getSavedPosts, getUserById, getUserPosts, likeComment, likePost, savePost, searchPosts, signOutAccount, updatePost, updateUser } from '../appwrite/api'
 import { INewComment, INewPost, INewUser, IUpdatePost, IUpdateUser } from '@/types'
 import { QUERY_KEYS } from './queryKeys'
-import { useEffect } from 'react'
-import { account } from '../appwrite/config'
 
 export const useCreateNewUser = () => {
     return useMutation({
@@ -37,21 +35,6 @@ export const useOAuthSignUp = () => {
     })
 }
 
-export const useOnOAuthSuccess = () => {
-    useEffect(()=>{
-
-        async () => {
-            const session = await account.get()
-            const user = await onOAuthSignUpSuccess({
-                $id: session.$id,
-                name: session.name,
-                email: session.email
-            })
-            return user
-        }
-
-    }, [])
-}
 
 export const useSignOut = () => {
     return useMutation({
