@@ -66,7 +66,7 @@ export async function SignUpOAuthAccount() {
         const email = session?.email
         const userId = session?.$id
         
-        account.createOAuth2Session('google', 'http://localhost:5173', 'http://localhost:5173/sign-up');
+        account.createOAuth2Session('google', 'https://lawgram.vercel.app', 'https://lawgram.vercel.app/sign-up');
         
         await new Promise((resolve: any) => {
             setTimeout(() => {
@@ -105,7 +105,7 @@ export async function saveOAuthUser(newAccount: {
 
 export async function SignInOAuthAccount() {
     try{
-        const session = account.createOAuth2Session('google', 'http://localhost:5173', 'http://localhost:5173/sign-in')
+        const session = account.createOAuth2Session('google', 'https://lawgram.vercel.app', 'https://lawgram.vercel.app/sign-in')
         return session
     } catch(error) {
         console.log(error)
