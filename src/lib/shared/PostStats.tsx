@@ -2,8 +2,7 @@ import { Models } from "appwrite"
 import { useDeleteSavedPost, useGetCurrentUser, useGetPostComments, useLikePost, useSavePost } from "../react-query/queriesAndMutations"
 import React, { useEffect, useState } from "react"
 import { checkIsLiked } from "../utils"
-import Loader from "./Loader"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Image } from "@nextui-org/react"
 
 
@@ -19,8 +18,8 @@ function PostStats({post, userId}: {post?: Models.Document, userId: string, isLi
     const { data: currentUser } = useGetCurrentUser()
 
     const {mutate: likePost} = useLikePost()
-    const {mutate: savePost, isPending: isSaving} = useSavePost()
-    const {mutate: deleteSavedPost, isPending: isDeleting} = useDeleteSavedPost()
+    const {mutate: savePost} = useSavePost()
+    const {mutate: deleteSavedPost} = useDeleteSavedPost()
 
     const {data: comments} = useGetPostComments(post?.$id || '')
 
@@ -74,7 +73,7 @@ function PostStats({post, userId}: {post?: Models.Document, userId: string, isLi
             />
             <p className="small-medium lg:base-medium ml-1 mr-1">{likes?.length}</p>
         </div>
-        <div className="flex flex-center gap-1">
+        <Link to={`/posts/${post?.$id}`} className="flex flex-center gap-1">
             <Image
                 src={`/assets/icons/comment.svg`}
                 width={20}
@@ -84,16 +83,16 @@ function PostStats({post, userId}: {post?: Models.Document, userId: string, isLi
                 className="cursor-pointer"
             />
             <p className="small-medium lg:base-medium ml-1 mr-1">{comments?.total ?? comments?.total}</p>
-        </div>
+        </Link>
         <div className="flex flex-center gap-1">
-            {isDeleting || isSaving ? <Loader /> : <Image
+            <Image
                 src={isSaved ? `/assets/icons/saved.svg` : `/assets/icons/save.svg`}
                 width={20}
                 height={20}
                 onClick={handleSavePost}
                 alt="save"
                 className="cursor-pointer"
-            />}
+            />
         </div>
     </div>
   )

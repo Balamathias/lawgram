@@ -7,12 +7,14 @@ import {
     PopoverTrigger, 
     PopoverContent, 
     Button as NextUIButton,
-    Image, 
+    Image,
+    useDisclosure, 
 } from '@nextui-org/react'
 
 import toast from "react-hot-toast"
 import { useQueryClient } from "@tanstack/react-query"
 import { QUERY_KEYS } from "../react-query/queryKeys"
+import UpdateComment from "@/components/UpdateComment"
 
 
 type ICommentStats = {
@@ -34,6 +36,8 @@ function CommentStats({comment, userId, isCopied, copyText}: ICommentStats) {
     const {mutateAsync: deletePost, isPending: isDeleting} = useDeleteComment()
     
     const queryClient = useQueryClient()
+
+    const {isOpen, onOpen, onOpenChange} = useDisclosure()
   
   const handleDeletePost = () => {
     deletePost({commentId: comment?.$id || '', imageId: comment?.imageId},{
@@ -76,9 +80,16 @@ function CommentStats({comment, userId, isCopied, copyText}: ICommentStats) {
             <p className="small-medium lg:base-medium ml-1 mr-1">{likes.length}</p>
         </div>
         <div className="flex flex-center gap-1">
-            <Popover placement="bottom" showArrow offset={10}>
+        {userId == comment?.user?.$id && <UpdateComment postId={comment?.post?.$id} action="Update" comment={comment} />}
+            <Popover placement="bottom" 
+                showArrow 
+                offset={10} 
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+            >
                 <PopoverTrigger>
-                    <NextUIButton 
+                    <NextUIButton
+                        onPress={onOpen} 
                         color="default"
                         isIconOnly
                         variant="faded"
@@ -97,19 +108,28 @@ function CommentStats({comment, userId, isCopied, copyText}: ICommentStats) {
                 <PopoverContent className="w-[196px] bg-dark-3">
                     {() => (
                         <div className="py-6 flex flex-col gap-3">
-                            <NextUIButton variant={'ghost'} className={`hover:text-lime-50`}
+                            <NextUIButton className={`hover:text-lime-50 bg-inherit justify-start`}
                                 onClick={copyText}
                                 color="primary"
+                                startContent={
+                                    isCopied ? <Image src="/assets/icons/checkmark.svg" alt="copy" width={24} height={24} /> : <Image src="/assets/icons/copy.svg" alt="copy" width={24} height={24} />
+                                }
                             >
-                                {isCopied ? <Image src="/assets/icons/checkmark.svg" alt="copy" width={16} height={16} /> : <Image src="/assets/icons/copy.svg" alt="copy" width={16} height={16} />}
                                 <span>Cop{isCopied ? 'ied': 'y'}</span>
                             </NextUIButton>
-                            {userId == comment?.user?.$id && <NextUIButton isLoading={isDeleting} variant={'ghost'} color="danger" className={`hover:text-lime-50`}
-                                onClick={handleDeletePost}
-                            >
-                                {!isDeleting && <Image src="/assets/icons/delete.svg" alt="delete" width={16} height={16} />}
-                                <span>Delet{isDeleting ? 'ing...': 'e'}</span>
-                            </NextUIButton>}
+                            {userId == comment?.user?.$id && 
+                            <>
+
+                                <NextUIButton isLoading={isDeleting} color="danger" className={`hover:text-lime-50 bg-inherit justify-start`}
+                                    onClick={handleDeletePost}
+                                    startContent={
+                                        <Image src="/assets/icons/delete.svg" alt="delete" width={24} height={24} />
+                                    }
+                                >
+                                    <span>Delet{isDeleting ? 'ing...': 'e'}</span>
+                                </NextUIButton>
+                            </>
+                            }
                         </div>
                     )}
                 </PopoverContent>

@@ -1,5 +1,5 @@
 import { useUserAuth } from "@/context/AuthContext"
-import { useDeletePost, useGetPostById, useGetPostComments, useGetPosts } from "@/lib/react-query/queriesAndMutations"
+import { useGetPostById, useGetPostComments, useGetPosts } from "@/lib/react-query/queriesAndMutations"
 import CommentForm from "@/components/CommentForm"
 import GridPostList from "@/lib/shared/GridPostList"
 import Loader from "@/lib/shared/Loader"
@@ -8,25 +8,20 @@ import { multiFormatDateString } from "@/lib/utils"
 import { Models } from "appwrite"
 import { useEffect } from "react"
 import { useInView } from "react-intersection-observer"
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import CommentCard from "@/lib/shared/CommentCard"
 import ProcessedPost from "../ProcessedPost"
-import useCopyLink from "@/parsers/useCopyLink"
-import toast from "react-hot-toast"
-import { Button, Image, Modal, ModalBody, ModalContent, ModalFooter, useDisclosure } from "@nextui-org/react"
+import { Image } from "@nextui-org/image"
+import DeletePost from "@/lib/shared/DeletePost"
+import SharePost from "@/lib/shared/SharePost"
 
 function PostDetails() {
   const {data: posts, fetchNextPage, hasNextPage} = useGetPosts()
   const {ref, inView} = useInView()
-  const {isOpen, onOpen, onOpenChange} = useDisclosure();
   
   const {id} = useParams()
   const {data: post, isPending} = useGetPostById(id || '')
   const { user } = useUserAuth()
-  const {mutateAsync: deletePost, isPending: isDeleting} = useDeletePost()
-  const navigate = useNavigate()
-
-  const {isCopied, copyLink} = useCopyLink()
 
   const {data: comments, isPending: isCommentsPending} = useGetPostComments(post?.$id || '')
 
@@ -34,15 +29,7 @@ function PostDetails() {
     if (inView) fetchNextPage()
   },[inView, fetchNextPage])
 
-  const handleDeletePost = () => {
-    deletePost({postId: post?.$id || '', imageId: post?.imageId},{
-      onSuccess() {
-          navigate('/')
-          onOpenChange()
-          return toast.success("Post deleted successfully.")
-      },
-    })
-  }
+  
 
   if (isPending) return <Loader />
   return (
@@ -78,30 +65,11 @@ function PostDetails() {
                       </div>
                   </div>
                 </Link>
-                <div className="flex-center gap-4">
-                  <div className={`flex-center`}>
-                      {isCopied ? (
-                        <Image 
-                          src="/assets/icons/checkmark.svg"
-                          alt="edit"
-                          width={24}
-                          height={24}
-                          title="Copied."
-                          className="cursor-pointer"
-                        />
-                      ) : (
-                        <Image
-                          src="/assets/icons/share.svg"
-                          alt="edit"
-                          width={24}
-                          height={24}
-                          title="Copy link to this post."
-                          className="cursor-pointer"
-                          onClick={copyLink}
-                      />
-                      )}
-                  </div>
-                  <Link to={`/update-post/${post?.$id}`} className={`${user.id !== post?.creator.$id ? "hidden" : ""}`}>
+                <div className="flex-center gap-1 md:gap-4">
+
+                  <SharePost post={post} />
+
+                  <Link to={`/update-post/${post?.$id}`} className={`flex-1 ${user.id !== post?.creator.$id ? "hidden" : ""}`}>
                       <Image
                           src="/assets/icons/edit.svg"
                           alt="edit"
@@ -109,46 +77,8 @@ function PostDetails() {
                           height={24}
                       />
                   </Link>
-                  <div className={`${user.id !== post?.creator.$id ? "hidden" : ""}`}>
-                    <div className="flex-1 py-4 max-w-5xl">
-                      <Button onPress={onOpen} className="border-none bg-dark-2 flex-center w-12 h-12 rounded-full">
-                        <Image
-                            src="/assets/icons/delete.svg"
-                            width={24}
-                            height={24}
-                            alt="delete"
-                          />
-                      </Button>
-                    </div>
-                    <Modal 
-                      isOpen={isOpen} 
-                      onOpenChange={onOpenChange}
-                      placement="center"
-                      backdrop="opaque"
-                    >
-                      <ModalContent className="bg-dark-2 p-4 shadow-2xl border border-rose-700">
-                        {(onClose) => (
-                          <>
-                          <ModalBody>
-                            <div className="py-6 flex flex-col gap-3 px-6 rounded-lg shadow z-20 bg-dark-2 border-rose-900">
-                              <p className="text-rose-700 base-medium">Are you sure you want to delete this post? This action cannot be undone!</p>
-                            </div>
-                              <ModalFooter>
-                                <Button color="primary" variant="solid" onPress={onClose} className="rounded-[50px]">
-                                  Close
-                                </Button>
-                                <Button variant={'flat'} color="danger" isLoading={isDeleting} className={`ghost_details-delete_btn border justify-end flex items-center gap-3 w-fit`}
-                                onClick={handleDeletePost}
-                              >
-                                {!isDeleting && <Image src="/assets/icons/delete.svg" alt="delete" width={16} height={16} />}
-                                <span>Delet{isDeleting ? 'ing...': 'e'}</span>
-                              </Button>
-                              </ModalFooter>
-                          </ModalBody>
-                          </>
-                        )}
-                      </ModalContent>
-                  </Modal>
+                  <div className={`flex-1 ${user.id !== post?.creator.$id ? "hidden" : ""}`}>
+                    <DeletePost post={post}/>
                   </div>
                 </div>
               </div>
@@ -166,7 +96,7 @@ function PostDetails() {
               </div>
             </div>
         </div>
-          <div className="w-full flex-1 max-w-5xl">
+          <div className="w-full flex-1 max-w-5xl" id="comments">
             <CommentForm postId={post?.$id || ''} />
 
             <div className="w-full flex justify-start max-w-5xl flex-col gap-7">

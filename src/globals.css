@@ -228,7 +228,7 @@
 
   /* Right sidebar*/
   .rightsidebar {
-    @apply hidden 2xl:flex px-6 py-10 flex-col justify-between 2xl:max-w-[580px] xl:min-w-[270px] xl:max-w-[320px] bg-dark-2;
+    @apply hidden min-[1800px]:flex px-6 py-10 flex-col justify-between 2xl:max-w-[580px] xl:min-w-[270px] xl:max-w-[320px] bg-dark-2;
   }
 
   /* Post Card */
@@ -276,7 +276,7 @@
   }
 
   .shad-textarea {
-    @apply h-36 bg-dark-3 rounded-xl border-none focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3 !important;
+    @apply h-36 bg-dark-3 rounded-xl border-none focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3;
   }
 
   .shad-comment-textarea {

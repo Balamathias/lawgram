@@ -23,7 +23,7 @@ import { Divider, Image, Button as NextUIButton } from "@nextui-org/react"
 function SignUpForm() {
   const { mutateAsync: createUserAccount, isPending } = useCreateNewUser()
   const { mutateAsync: getUserSession } = useSignIn()
-  const { mutateAsync: getUserOAuthSession, isPending: isGetting } = useOAuthSignUp()
+  const { isPending: isGetting } = useOAuthSignUp()
   const { checkUser } = useUserAuth()
   const navigate = useNavigate()
 
@@ -38,7 +38,7 @@ function SignUpForm() {
   })
 
   async function handleOAuthSignUp() {
-    await getUserOAuthSession()
+    // await getUserOAuthSession()
   }
  
   async function onSubmit(values: z.infer<typeof SignUpValidation>) {

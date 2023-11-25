@@ -30,6 +30,16 @@ export type INavLink = {
     imageUrl?: string;
   };
   
+  export type IUpdateComment = {
+    commentId: string | undefined,
+    user?: string;
+    post?: string;
+    comment: string;
+    file: File[] | [];
+    imageId?: string;
+    imageUrl?: string;
+  };
+  
   export type IUpdatePost = {
     postId: string;
     caption: string;

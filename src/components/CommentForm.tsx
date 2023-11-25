@@ -43,11 +43,11 @@ function CommentForm({comment, postId, action}:{comment?: Models.Document, postI
 
         console.log(newComment)
 
-        if (!newComment) return toast.error("Comment could not be added, please try again.")
+        if (!newComment) return toast?.error("Comment could not be added, please try again.")
 
         if (newComment) {
-            form.reset()
-            toast.success("Comment Posted successfully.")
+            form?.reset()
+            toast?.success("Comment Posted successfully.")
             onOpenChange()
         }
     }

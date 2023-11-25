@@ -5,8 +5,8 @@ import {
     useInfiniteQuery
 } from '@tanstack/react-query'
 
-import { SignInAccount, SignInOAuthAccount, SignUpOAuthAccount, addPostComment, createPost, createUserAccount, deleteComment, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getInfiniteRecentPosts, getInfiniteUsers, getPostById, getPostComments, getRecentPosts, getSavedPosts, getUserById, getUserPosts, likeComment, likePost, savePost, searchPosts, signOutAccount, updatePost, updateUser } from '../appwrite/api'
-import { INewComment, INewPost, INewUser, IUpdatePost, IUpdateUser } from '@/types'
+import { SignInAccount, SignInOAuthAccount, SignUpOAuthAccount, addPostComment, createPost, createUserAccount, deleteComment, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getInfiniteRecentPosts, getInfiniteUsers, getPostById, getPostComments, getRecentPosts, getSavedPosts, getUserById, getUserPosts, likeComment, likePost, savePost, searchPosts, signOutAccount, updatePost, updatePostComment, updateUser } from '../appwrite/api'
+import { INewComment, INewPost, INewUser, IUpdateComment, IUpdatePost, IUpdateUser } from '@/types'
 import { QUERY_KEYS } from './queryKeys'
 
 export const useCreateNewUser = () => {
@@ -243,6 +243,20 @@ export const useCreateComment = () => {
         onSuccess: (data: any) => {
             queryClient.invalidateQueries({
                 queryKey: [QUERY_KEYS.GET_POST_COMMENTS, data?.post?.$id]
+            })
+            queryClient.invalidateQueries({queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.post?.$id]})
+
+        }
+    })
+}
+
+export const useUpdateComment = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: (comment: IUpdateComment) => updatePostComment(comment),
+        onSuccess: (data: any) => {
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.GET_POST_COMMENTS]
             })
             queryClient.invalidateQueries({queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.post?.$id]})
 

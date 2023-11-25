@@ -1,4 +1,4 @@
-import { INewComment, INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types"
+import { INewComment, INewPost, INewUser, IUpdateComment, IUpdatePost, IUpdateUser } from "@/types"
 import { account, appwriteConfig, avatars, databases, storage } from "./config"
 import { ID, Query } from "appwrite"
 import { URL } from "url"
@@ -613,6 +613,48 @@ export async function addPostComment(comment: INewComment) {
                 user: comment.user,
                 comment: comment.comment,
                 imageUrl: fileUrl,
+                imageId: uploadedFile ? (await uploadedFile)?.$id : null,                    
+            }
+        )
+
+        if (!newComment) {
+            uploadedFile ? deleteFile((await uploadedFile)?.$id) : null
+            throw Error
+        }
+
+        return newComment
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+}
+
+export async function updatePostComment(comment: IUpdateComment) {
+    try {
+        let uploadedFile
+        let fileUrl: URL | null = null
+        let newComment = {}
+        const hasFileToUpload = comment?.file?.length > 1 && typeof comment?.file !== 'string'
+        
+        if (hasFileToUpload) {
+            uploadedFile = uploadFile(comment?.file?.at(0)) || null
+            if (!uploadedFile) throw Error
+            fileUrl = await getFilePreview((await uploadedFile).$id)
+            
+            if (!fileUrl) {
+                deleteFile((await uploadedFile).$id)
+                throw Error
+            }
+        }
+        console.log(hasFileToUpload, comment?.file)
+
+        newComment = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.commentsCollectionId,
+            comment.commentId,
+            {
+                comment: comment.comment,
+                imageUrl: fileUrl ?? comment.imageUrl,
                 imageId: uploadedFile ? (await uploadedFile)?.$id : null,                    
             }
         )
