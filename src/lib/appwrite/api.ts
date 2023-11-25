@@ -651,7 +651,7 @@ export async function updatePostComment(comment: IUpdateComment) {
         newComment = await databases.updateDocument(
             appwriteConfig.databaseId,
             appwriteConfig.commentsCollectionId,
-            comment.commentId,
+            comment?.commentId || '',
             {
                 comment: comment.comment,
                 imageUrl: fileUrl ?? comment.imageUrl,
