@@ -52,8 +52,6 @@ function SharePost({ post }: {post?: Models.Document | undefined}) {
         window.open(whatsappLink, '_blank');
       }
 
-      const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|Windows Phone/i.test(navigator.userAgent)
-
   return (
     <>
         <div className="flex-1 py-2 md:py-4 max-w-5xl">
@@ -107,7 +105,7 @@ function SharePost({ post }: {post?: Models.Document | undefined}) {
                         Copy Post Content
                     </Button>
                     <Button 
-                        onClick={!isMobile ? shareOnWhatsApp : () => handleShare('email')}
+                        onClick={shareOnWhatsApp}
                         color="success"
                         className="bg-dark-4 text-light-2"
                         radius="sm"
