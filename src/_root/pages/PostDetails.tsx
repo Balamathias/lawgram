@@ -12,8 +12,7 @@ import { Link, useParams } from "react-router-dom"
 import CommentCard from "@/lib/shared/CommentCard"
 import ProcessedPost from "../ProcessedPost"
 import { Image } from "@nextui-org/image"
-import DeletePost from "@/lib/shared/DeletePost"
-import SharePost from "@/lib/shared/SharePost"
+import PostActions from "@/lib/shared/PostActions"
 
 function PostDetails() {
   const {data: posts, fetchNextPage, hasNextPage} = useGetPosts()
@@ -43,7 +42,7 @@ function PostDetails() {
             />}
             <div className="post_details-info">
               <div className="flex-between w-full">
-                <Link to={`/profile/${post?.creator?.$id}`} className="flex items-center gap-4">
+                <Link to={`/profile/${post?.creator?.$id}`} className="flex max-[480px]:flex-col max-[480px]:items-start items-center gap-4">
                   <Image 
                   src={post?.creator?.profileImage || '/assets/icons/profile-placeholder.svg'}
                   alt="profile_image"
@@ -58,29 +57,14 @@ function PostDetails() {
                         height={20}
                     />}
                       </p>
-                      <div className="flex flex-center gap-3">
+                      <div className="flex flex-center gap-3 max-[480px]:flex-col max-[480px]:items-start">
                           <p className="subtle-semibold lg:small-regular">{multiFormatDateString(post?.$createdAt)}</p>
                           -
                           <p className="subtle-semibold lg:small-regular">{post?.location}</p>
                       </div>
                   </div>
                 </Link>
-                <div className="flex-center gap-1 md:gap-4">
-
-                  <SharePost post={post} />
-
-                  <Link to={`/update-post/${post?.$id}`} className={`flex-1 ${user.id !== post?.creator.$id ? "hidden" : ""}`}>
-                      <Image
-                          src="/assets/icons/edit.svg"
-                          alt="edit"
-                          width={24}
-                          height={24}
-                      />
-                  </Link>
-                  <div className={`flex-1 ${user.id !== post?.creator.$id ? "hidden" : ""}`}>
-                    <DeletePost post={post}/>
-                  </div>
-                </div>
+                <PostActions post={post} user={user}/>
               </div>
               <hr className="border border-dark-4/80 w-full" />
               <div className="small-medium lg:base-medium py-5 flex flex-1 flex-col gap-4 w-full">

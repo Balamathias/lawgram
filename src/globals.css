@@ -228,7 +228,7 @@
 
   /* Right sidebar*/
   .rightsidebar {
-    @apply hidden min-[1800px]:flex px-6 py-10 flex-col justify-between 2xl:max-w-[580px] xl:min-w-[270px] xl:max-w-[320px] bg-dark-2;
+    @apply hidden min-[2000px]:flex px-6 py-10 flex-col justify-between 2xl:max-w-[580px] xl:min-w-[270px] xl:max-w-[320px] bg-dark-2;
   }
 
   /* Post Card */
